@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://nemchahue.github.io/</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://nemchahue.github.io/assets/images/hero.jpg</image:loc>
+      <image:title>Nem Chả Mụ Ánh Đặc Sản Cố Đô Gia Truyền</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nemchahue.github.io/assets/images/nem-chua.jpg</image:loc>
+      <image:title>Nem Chua Mụ Ánh Truyền Thống</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nemchahue.github.io/assets/images/cha-bo.jpg</image:loc>
+      <image:title>Chả Bò Mụ Ánh Cố Đô Đặc Biệt</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nemchahue.github.io/assets/images/tre-hue.jpg</image:loc>
+      <image:title>Tré Huế Mụ Ánh Cung Đình</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://nemchahue.github.io/assets/images/combo-qua-bieu.jpg</image:loc>
+      <image:title>Combo Quà Biếu Tứ Quý Mụ Ánh</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://nemchahue.github.io/llms.txt</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
