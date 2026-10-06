@@ -138,6 +138,28 @@ def build_report_message(metrics, date_str=None):
     prods = metrics['product_breakdown']
     channels = metrics['channels']
 
+    if orders == 0:
+        lines = [
+            "🎋 *BÁO CÁO KINH DOANH TUẦN - NEM CHẢ MỤ ÁNH* 🎋",
+            f"⏱ *Kỳ báo cáo:* {date_str}",
+            "📍 *Cơ sở:* 25/135 Đặng Văn Ngữ, An Cựu, TP. Huế\n",
+            "📊 *1. HIỆU SUẤT BÁN HÀNG & DOANH THU*",
+            "• *Tổng đơn hàng đã chốt:* `0 đơn`",
+            "• *Doanh thu ước tính (GMV):* `0 đ`",
+            "• *Giá trị đơn trung bình (AOV):* `0 đ`",
+            "• *Đăng ký sỉ & đại lý mới:* `0 đối tác`\n",
+            "🥩 *2. PHÂN BỔ MÓN ĐẶC SẢN TIÊU THỤ*",
+            "• _(Chưa có đơn hàng mới phát sinh trong kỳ báo cáo này)_\n",
+            "🌐 *3. KÊNH TIẾP THỊ & CHUYỂN ĐỔI*",
+            "• _(Hệ thống đang sẵn sàng ghi nhận khi có đơn hàng mới)_\n",
+            "💡 *4. KHUYẾN NGHỊ VẬN HÀNH TUẦN MỚI*",
+            "1. Duy trì kiểm tra định kỳ Hotline 0912.515.329 và tin nhắn Zalo tư vấn.",
+            "2. Đăng bài viết và hình ảnh đặc sản lên Zalo & Facebook để thu hút khách hàng mới.",
+            "3. Chuẩn bị sẵn đá khô và thùng xốp phục vụ các đơn hàng hỏa tốc trong tuần.",
+            "\n_Hệ thống báo cáo tự động của Nem Chả Mụ Ánh._"
+        ]
+        return "\n".join(lines)
+
     lines = [
         "🎋 *BÁO CÁO KINH DOANH TUẦN - NEM CHẢ MỤ ÁNH* 🎋",
         f"⏱ *Kỳ báo cáo:* {date_str}",
@@ -203,20 +225,9 @@ def main():
     chat_id = os.environ.get('TELEGRAM_CHAT_ID')
     csv_url = os.environ.get('SHEETS_CSV_URL')
 
-    # Example sample data if running for demo
-    if not csv_url:
-        print("Note: SHEETS_CSV_URL not set. Running with demonstration data.")
-        sample_rows = [
-            {'Món Đặt': 'Nem Chua Mụ Ánh Truyền Thống', 'Số Lượng': '2', 'Nguồn / UTM': 'Facebook Ads'},
-            {'Món Đặt': 'Chả Bò Mụ Ánh Cố Đô Đặc Biệt', 'Số Lượng': '1', 'Nguồn / UTM': 'Zalo'},
-            {'Món Đặt': 'Set Quà Biếu Tứ Quý Mụ Ánh', 'Số Lượng': '1', 'Nguồn / UTM': 'Google'},
-            {'Món Đặt': '📦 Đặt Mua Sỉ / Đại Lý', 'Số Lượng': '1', 'Nguồn / UTM': 'Facebook'},
-            {'Món Đặt': 'Tré Huế Mụ Ánh Cung Đình', 'Số Lượng': '3', 'Nguồn / UTM': 'Zalo'},
-        ]
-        metrics = calculate_metrics(sample_rows)
-    else:
-        rows = fetch_sheet_orders(csv_url)
-        metrics = calculate_metrics(rows)
+    # Fetch real order records from Google Sheets CSV (or empty list if no URL configured yet)
+    rows = fetch_sheet_orders(csv_url) if csv_url else []
+    metrics = calculate_metrics(rows)
 
     report = build_report_message(metrics)
     print("\n--- WEEKLY METRICS REPORT ---")

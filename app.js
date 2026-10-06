@@ -906,7 +906,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const funnelContainer = document.getElementById('analytics-funnel-steps');
     if (funnelContainer) {
       const totalVisits = TELEMETRY.visitCount;
-      const menuViews = TELEMETRY.journeyBreadcrumb.includes('Thực đơn & Bảng giá') ? totalVisits : Math.max(1, totalVisits - 1);
+      const menuViews = TELEMETRY.journeyBreadcrumb.includes('Thực đơn & Bảng giá') ? totalVisits : 0;
       const cartAdds = stats['add_to_cart'] || 0;
       const contactClicks = (stats['click_hotline'] || 0) + (stats['click_zalo'] || 0);
       const orders = TELEMETRY.orderCount;
