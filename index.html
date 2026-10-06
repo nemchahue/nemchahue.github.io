@@ -5,10 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- Configuration -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://formsubmit.co; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https://formsubmit.co https://*.google-analytics.com https://*.analytics.google.com https://*.clarity.ms https://c.bing.com https://cdn.counter.dev; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://*.google-analytics.com https://www.clarity.ms https://scripts.clarity.ms https://cdn.counter.dev;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <!-- Analytics Container Hook -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  </script>
   
   <!-- Primary Meta Tags -->
   <title>Nem Chả Mụ Ánh | Đặc Sản Cố Đô Gia Truyền - 25/135 Đặng Văn Ngữ, Huế</title>
@@ -861,6 +868,44 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary btn-block" id="modal-close-btn">Đã Hiểu & Quay Lại</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Private Admin Analytics Dashboard Modal (Open via #analytics or Ctrl+Shift+A) -->
+  <div class="modal-overlay" id="analytics-modal">
+    <div class="modal-content analytics-modal-content">
+      <div class="modal-header">
+        <span class="modal-success-icon">📊</span>
+        <h3>Bảng Thống Kê & Phân Tích Lượt Tương Tác</h3>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">Dữ liệu ghi nhận tự động trên trình duyệt hiện tại:</p>
+        <div class="analytics-grid" id="analytics-grid-metrics">
+          <div class="analytics-metric-box">
+            <strong id="stat-views">0</strong>
+            <span>Lượt Ghé Thăm</span>
+          </div>
+          <div class="analytics-metric-box">
+            <strong id="stat-hotline">0</strong>
+            <span>Bấm Gọi Hotline</span>
+          </div>
+          <div class="analytics-metric-box">
+            <strong id="stat-zalo">0</strong>
+            <span>Bấm Chat Zalo</span>
+          </div>
+          <div class="analytics-metric-box">
+            <strong id="stat-cart">0</strong>
+            <span>Thêm Vào Giỏ</span>
+          </div>
+        </div>
+        <div class="analytics-info-list" id="analytics-session-info">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex; gap:10px;">
+        <button type="button" class="btn btn-outline" style="flex:1;" id="analytics-reset-btn">Đặt Lại</button>
+        <button type="button" class="btn btn-primary" style="flex:1;" id="analytics-close-btn">Đóng</button>
       </div>
     </div>
   </div>

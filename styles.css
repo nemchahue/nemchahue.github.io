@@ -1584,3 +1584,49 @@ button {
     justify-content: center;
   }
 }
+
+/* Admin Analytics Modal */
+.analytics-modal-content {
+  max-width: 550px;
+  background: #FFF;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  width: 90%;
+}
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+.analytics-metric-box {
+  background: var(--bg-main);
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  text-align: center;
+}
+.analytics-metric-box strong {
+  display: block;
+  font-size: 1.6rem;
+  color: var(--primary);
+  line-height: 1.2;
+}
+.analytics-metric-box span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.analytics-info-list {
+  background: #F8FAFC;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  border: 1px solid #E2E8F0;
+}
+

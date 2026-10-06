@@ -15,6 +15,102 @@ const getDispatchRecipient = () => {
 };
 const HOTLINE = '0912515329';
 
+// ============================================================
+// CLIENT TELEMETRY & ATTRIBUTION ENGINE (Free Data Collection)
+// ============================================================
+const TELEMETRY = {
+  startTime: Date.now(),
+  referrer: document.referrer || 'Truy cập trực tiếp (Direct)',
+  utm: (() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const utms = [];
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(k => {
+        if (p.get(k)) utms.push(`${k}=${p.get(k)}`);
+      });
+      return utms.length > 0 ? utms.join(' & ') : 'Không có';
+    } catch (e) {
+      return 'Không có';
+    }
+  })(),
+  device: (() => {
+    const ua = navigator.userAgent || '';
+    let os = 'Khác';
+    if (/iPhone|iPad|iPod/i.test(ua)) os = 'iPhone/iPad (iOS)';
+    else if (/Android/i.test(ua)) os = 'Android';
+    else if (/Windows/i.test(ua)) os = 'Windows PC';
+    else if (/Macintosh|Mac OS/i.test(ua)) os = 'Mac OS';
+    else if (/Linux/i.test(ua)) os = 'Linux';
+
+    const form = /Mobi|Android|iPhone/i.test(ua) ? 'Di động (Mobile)' : 'Máy tính (Desktop)';
+    const res = `${window.screen ? window.screen.width : 0}x${window.screen ? window.screen.height : 0}`;
+    return `${os} • ${form} • Màn hình: ${res}`;
+  })(),
+  visitCount: (() => {
+    try {
+      const curr = parseInt(localStorage.getItem('muanh_visits') || '0', 10) + 1;
+      localStorage.setItem('muanh_visits', String(curr));
+      return curr;
+    } catch (e) {
+      return 1;
+    }
+  })(),
+  interactions: new Set(),
+  maxScroll: 0,
+
+  logInteraction(action) {
+    this.interactions.add(action);
+    this.incrementMetric(action);
+  },
+
+  incrementMetric(metric) {
+    try {
+      const stats = JSON.parse(localStorage.getItem('muanh_stats') || '{}');
+      stats[metric] = (stats[metric] || 0) + 1;
+      localStorage.setItem('muanh_stats', JSON.stringify(stats));
+    } catch (e) {}
+  },
+
+  getStats() {
+    try {
+      return JSON.parse(localStorage.getItem('muanh_stats') || '{}');
+    } catch (e) {
+      return {};
+    }
+  },
+
+  getDuration() {
+    const sec = Math.floor((Date.now() - this.startTime) / 1000);
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return m > 0 ? `${m} phút ${s} giây` : `${s} giây`;
+  },
+
+  getSummary() {
+    return {
+      referrer: this.referrer,
+      utm: this.utm,
+      device: this.device,
+      duration: this.getDuration(),
+      visitCount: `Lần thứ ${this.visitCount} (${this.visitCount > 1 ? 'Khách hàng quay lại' : 'Khách mới ghé thăm'})`,
+      maxScroll: `${this.maxScroll}% trang`,
+      interactions: Array.from(this.interactions).join(', ') || 'Chưa phát sinh tương tác'
+    };
+  }
+};
+
+// Universal Analytics Event Dispatcher (GA4 & Local Telemetry Compatible)
+window.trackEvent = function(eventName, eventData = {}) {
+  try {
+    TELEMETRY.logInteraction(eventName);
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: eventName, ...eventData, timestamp: Date.now() });
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', eventName, eventData);
+    }
+  } catch (e) {}
+};
+
 const PRODUCTS = [
   {
     id: 'nem-chua-mu-anh',
@@ -161,6 +257,7 @@ function addToCart(productId) {
   saveCart();
   updateCartUI();
   openCartDrawer();
+  window.trackEvent('add_to_cart', { product_id: prod.id, product_name: prod.name, price: prod.price });
 }
 
 function updateCartQty(productId, delta) {
@@ -374,6 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.innerHTML = '<span>Đang gửi đơn hàng... ⏳</span>';
       }
 
+      const telemetrySummary = TELEMETRY.getSummary();
       const payload = {
         _subject: `[ĐƠN HÀNG MỚI] Nem Chả Mụ Ánh - Khách: ${safeName} (${safePhone})`,
         _template: 'table',
@@ -386,7 +484,15 @@ document.addEventListener('DOMContentLoaded', () => {
         'Số lượng': qty,
         'Ghi chú của khách': safeNote || 'Không có',
         'Các món trong giỏ hàng': cartSummary,
-        'Thời gian đặt': new Date().toLocaleString('vi-VN')
+        'Thời gian đặt': new Date().toLocaleString('vi-VN'),
+        '--- DỮ LIỆU PHÂN TÍCH KHÁCH HÀNG ---': '----------------------------------------',
+        'Nguồn giới thiệu (Referrer)': telemetrySummary.referrer,
+        'Chiến dịch quảng cáo (UTM)': telemetrySummary.utm,
+        'Thiết bị & Màn hình': telemetrySummary.device,
+        'Thời gian xem web trước khi đặt': telemetrySummary.duration,
+        'Lịch sử ghé thăm': telemetrySummary.visitCount,
+        'Độ cuộn trang': telemetrySummary.maxScroll,
+        'Các tương tác trước khi đặt': telemetrySummary.interactions
       };
 
       try {
@@ -491,10 +597,103 @@ document.addEventListener('DOMContentLoaded', () => {
   topBtn?.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  // Analytics & Interaction Telemetry Listeners
+  // 1. Hotline Clicks
+  document.querySelectorAll('a[href^="tel:"]').forEach(link => {
+    link.addEventListener('click', () => {
+      window.trackEvent('click_hotline', { phone: '0912515329', source: link.id || 'hotline_link' });
+    });
+  });
+
+  // 2. Zalo Clicks
+  document.querySelectorAll('a[href*="zalo.me"]').forEach(link => {
+    link.addEventListener('click', () => {
+      window.trackEvent('click_zalo', { source: link.className || 'zalo_link' });
+    });
+  });
+
+  // 3. Scroll Depth Milestones
+  window.addEventListener('scroll', () => {
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight > 0) {
+      const scrollPct = Math.min(100, Math.round((window.scrollY / docHeight) * 100));
+      if (scrollPct > TELEMETRY.maxScroll) {
+        TELEMETRY.maxScroll = scrollPct;
+        if (scrollPct >= 50 && !TELEMETRY.interactions.has('Đã cuộn 50%')) {
+          TELEMETRY.logInteraction('Đã cuộn 50%');
+        }
+        if (scrollPct >= 85 && !TELEMETRY.interactions.has('Đã xem cuối trang (85%+)')) {
+          TELEMETRY.logInteraction('Đã xem cuối trang (85%+)');
+        }
+      }
+    }
+  }, { passive: true });
+
+  // 4. Admin Analytics Modal Management
+  function renderAnalyticsModal() {
+    const stats = TELEMETRY.getStats();
+    const summary = TELEMETRY.getSummary();
+
+    const viewsEl = document.getElementById('stat-views');
+    const hotlineEl = document.getElementById('stat-hotline');
+    const zaloEl = document.getElementById('stat-zalo');
+    const cartEl = document.getElementById('stat-cart');
+    const infoEl = document.getElementById('analytics-session-info');
+
+    if (viewsEl) viewsEl.textContent = TELEMETRY.visitCount;
+    if (hotlineEl) hotlineEl.textContent = stats['click_hotline'] || 0;
+    if (zaloEl) zaloEl.textContent = stats['click_zalo'] || 0;
+    if (cartEl) cartEl.textContent = stats['add_to_cart'] || 0;
+
+    if (infoEl) {
+      infoEl.innerHTML = `
+        <p><strong>Nguồn giới thiệu:</strong> ${escapeHTML(summary.referrer)}</p>
+        <p><strong>Chiến dịch (UTM):</strong> ${escapeHTML(summary.utm)}</p>
+        <p><strong>Thiết bị & Màn hình:</strong> ${escapeHTML(summary.device)}</p>
+        <p><strong>Thời gian duyệt web:</strong> ${escapeHTML(summary.duration)}</p>
+        <p><strong>Độ sâu cuộn trang:</strong> ${escapeHTML(summary.maxScroll)}</p>
+        <p><strong>Nhật ký tương tác:</strong> ${escapeHTML(summary.interactions)}</p>
+      `;
+    }
+
+    document.getElementById('analytics-modal')?.classList.add('active');
+  }
+
+  function closeAnalyticsModal() {
+    document.getElementById('analytics-modal')?.classList.remove('active');
+  }
+
+  document.getElementById('analytics-close-btn')?.addEventListener('click', closeAnalyticsModal);
+  document.getElementById('analytics-reset-btn')?.addEventListener('click', () => {
+    if (confirm('Đặt lại toàn bộ số liệu thống kê trên trình duyệt này?')) {
+      localStorage.removeItem('muanh_stats');
+      localStorage.setItem('muanh_visits', '1');
+      TELEMETRY.interactions.clear();
+      renderAnalyticsModal();
+    }
+  });
+
+  // Open via Hash (#analytics or #thong-ke) or Shortcut Ctrl+Shift+A
+  if (window.location.hash === '#analytics' || window.location.hash === '#thong-ke') {
+    setTimeout(renderAnalyticsModal, 600);
+  }
+  window.addEventListener('hashchange', () => {
+    if (window.location.hash === '#analytics' || window.location.hash === '#thong-ke') {
+      renderAnalyticsModal();
+    }
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+      e.preventDefault();
+      renderAnalyticsModal();
+    }
+  });
 });
 
 // Interactive Wholesale Selection Helper (UX Booster)
 window.selectWholesaleTier = function(tierName) {
+  window.trackEvent('select_wholesale_tier', { tier: tierName });
   const prodSelect = document.getElementById('product-select');
   const noteField = document.getElementById('order-note');
   const orderSection = document.getElementById('order');
