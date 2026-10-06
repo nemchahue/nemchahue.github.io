@@ -185,7 +185,7 @@ const TELEMETRY = {
   }
 };
 
-// Universal Analytics Event Dispatcher (GA4 & Local Telemetry Compatible)
+// Universal Analytics Event Dispatcher (GA4, Clarity & Local Telemetry Compatible)
 window.trackEvent = function(eventName, eventData = {}) {
   try {
     TELEMETRY.logInteraction(eventName);
@@ -193,6 +193,9 @@ window.trackEvent = function(eventName, eventData = {}) {
     window.dataLayer.push({ event: eventName, ...eventData, timestamp: Date.now() });
     if (typeof window.gtag === 'function') {
       window.gtag('event', eventName, eventData);
+    }
+    if (typeof window.clarity === 'function') {
+      window.clarity('event', eventName);
     }
   } catch (e) {}
 };
