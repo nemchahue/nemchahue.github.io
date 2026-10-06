@@ -701,6 +701,8 @@
                 <textarea id="order-note" name="ghi_chu_don_hang" rows="2" maxlength="500" placeholder="Ghi chú yêu cầu của bạn..."></textarea>
               </div>
 
+              <div class="form-draft-notice" id="form-draft-notice" style="display:none; margin: 10px 0; font-size: 0.85rem; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 6px; padding: 8px 12px;"></div>
+
               <button type="submit" class="btn btn-primary btn-block" id="submit-order-btn">
                 <span class="btn-submit-text">Xác Nhận Đặt Hàng Ngay ➔</span>
               </button>
@@ -877,10 +879,13 @@
     <div class="modal-content analytics-modal-content">
       <div class="modal-header">
         <span class="modal-success-icon">📊</span>
-        <h3>Bảng Thống Kê & Phân Tích Lượt Tương Tác</h3>
+        <div>
+          <h3 style="margin:0; font-size:1.15rem; color:var(--primary);">Trung Tâm Phân Tích & Dữ Liệu Khách Hàng</h3>
+          <p style="margin:2px 0 0 0; font-size:0.78rem; color:var(--text-muted);">Thu thập hành vi, nguồn khách và leads miễn phí (Zero Server Cost)</p>
+        </div>
       </div>
       <div class="modal-body">
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">Dữ liệu ghi nhận tự động trên trình duyệt hiện tại:</p>
+        <!-- Core Metrics Grid (6 Boxes) -->
         <div class="analytics-grid" id="analytics-grid-metrics">
           <div class="analytics-metric-box">
             <strong id="stat-views">0</strong>
@@ -888,24 +893,68 @@
           </div>
           <div class="analytics-metric-box">
             <strong id="stat-hotline">0</strong>
-            <span>Bấm Gọi Hotline</span>
+            <span>Gọi Hotline</span>
           </div>
           <div class="analytics-metric-box">
             <strong id="stat-zalo">0</strong>
-            <span>Bấm Chat Zalo</span>
+            <span>Chat Zalo</span>
           </div>
           <div class="analytics-metric-box">
             <strong id="stat-cart">0</strong>
             <span>Thêm Vào Giỏ</span>
           </div>
+          <div class="analytics-metric-box">
+            <strong id="stat-orders" style="color:#059669;">0</strong>
+            <span>Đơn Đã Chốt</span>
+          </div>
+          <div class="analytics-metric-box">
+            <strong id="stat-cvr" style="color:#d97706;">0%</strong>
+            <span>Tỉ Lệ Đặt Hàng</span>
+          </div>
         </div>
-        <div class="analytics-info-list" id="analytics-session-info">
-          <!-- Populated by JS -->
+
+        <!-- Conversion Funnel Bar -->
+        <div class="analytics-card-section">
+          <h4 class="analytics-subheading">📈 Phễu Chuyển Đổi Thực Tế (Conversion Funnel)</h4>
+          <div class="funnel-steps" id="analytics-funnel-steps">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Abandoned Leads Recovery -->
+        <div class="analytics-card-section">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h4 class="analytics-subheading" style="margin:0;">🎯 SĐT Khách Bỏ Dở (Leads Đã Nhập Chưa Gửi Đơn)</h4>
+            <span id="abandoned-leads-badge" class="badge-count">0 số</span>
+          </div>
+          <div id="analytics-abandoned-list" class="abandoned-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Session Intelligence & Attribution -->
+        <div class="analytics-card-section">
+          <h4 class="analytics-subheading">🔍 Dữ Liệu Phiên Duyệt Hiện Tại (Session Intelligence)</h4>
+          <div class="analytics-info-list" id="analytics-session-info">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Google Sheets Webhook Integration -->
+        <div class="analytics-card-section">
+          <h4 class="analytics-subheading">📊 Tự Động Lưu Vào Google Sheets (100% Miễn Phí)</h4>
+          <p style="font-size:0.78rem; color:var(--text-muted); margin:4px 0 8px 0;">Dán URL Web App từ Google Apps Script để tự động xuất từng đơn hàng và lead vào file Google Sheet cá nhân:</p>
+          <div class="webhook-input-group" style="display:flex; gap:8px;">
+            <input type="url" id="sheets-webhook-input" placeholder="https://script.google.com/macros/s/.../exec" style="flex:1; padding:8px 10px; font-size:0.82rem; border:1px solid #cbd5e1; border-radius:4px;">
+            <button type="button" class="btn btn-outline" id="sheets-webhook-save-btn" style="padding:8px 14px; font-size:0.82rem; white-space:nowrap;">Lưu URL</button>
+          </div>
+          <div id="webhook-status-msg" style="font-size:0.75rem; margin-top:4px; color:#059669; display:none;">✓ Đã lưu cấu hình Google Sheets Webhook!</div>
         </div>
       </div>
-      <div class="modal-footer" style="display:flex; gap:10px;">
-        <button type="button" class="btn btn-outline" style="flex:1;" id="analytics-reset-btn">Đặt Lại</button>
-        <button type="button" class="btn btn-primary" style="flex:1;" id="analytics-close-btn">Đóng</button>
+      <div class="modal-footer" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-outline" style="flex:1; min-width:140px; font-size:0.85rem;" id="analytics-export-btn">📥 Tải Báo Cáo (JSON)</button>
+        <button type="button" class="btn btn-outline" style="flex:1; min-width:110px; font-size:0.85rem;" id="analytics-reset-btn">🔄 Đặt Lại</button>
+        <button type="button" class="btn btn-primary" style="flex:1; min-width:100px; font-size:0.85rem;" id="analytics-close-btn">Đóng</button>
       </div>
     </div>
   </div>

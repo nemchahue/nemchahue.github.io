@@ -20,23 +20,50 @@ const HOTLINE = '0912515329';
 // ============================================================
 const TELEMETRY = {
   startTime: Date.now(),
-  referrer: document.referrer || 'Truy cập trực tiếp (Direct)',
+  activeTime: 0,
+  lastActiveStamp: Date.now(),
+  referrer: (() => {
+    const ref = document.referrer;
+    if (!ref) return 'Truy cập trực tiếp (Direct)';
+    if (/google\./i.test(ref)) return `Google Tìm kiếm (${ref})`;
+    if (/facebook\.com|fb\.com/i.test(ref)) return `Facebook (${ref})`;
+    if (/zalo\.me/i.test(ref)) return `Zalo Chat/Post (${ref})`;
+    if (/tiktok\.com/i.test(ref)) return `TikTok (${ref})`;
+    if (/youtube\.com/i.test(ref)) return `YouTube (${ref})`;
+    return ref;
+  })(),
+  landingUrl: window.location.href,
   utm: (() => {
     try {
       const p = new URLSearchParams(window.location.search);
-      const utms = [];
-      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(k => {
-        if (p.get(k)) utms.push(`${k}=${p.get(k)}`);
+      const list = [];
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid', 'zarsrc'].forEach(k => {
+        if (p.get(k)) list.push(`${k}=${p.get(k)}`);
       });
-      return utms.length > 0 ? utms.join(' & ') : 'Không có';
+      return list.length > 0 ? list.join(' & ') : 'Không có mã chiến dịch';
     } catch (e) {
       return 'Không có';
     }
   })(),
+  browserApp: (() => {
+    const ua = navigator.userAgent || '';
+    if (/Zalo/i.test(ua)) return 'Trình duyệt nội bộ Zalo (Zalo In-App WebView)';
+    if (/FBAN|FBAV/i.test(ua)) return 'Trình duyệt Facebook Mobile (FB WebView)';
+    if (/Instagram/i.test(ua)) return 'Trình duyệt Instagram (In-App WebView)';
+    if (/musical_ly|Bytedance|TikTok/i.test(ua)) return 'Trình duyệt TikTok (In-App WebView)';
+    if (/CocCoc/i.test(ua)) return 'Cốc Cốc Browser';
+    if (/Edg/i.test(ua)) return 'Microsoft Edge';
+    if (/Chrome/i.test(ua) && /Mobile/i.test(ua)) return 'Google Chrome Mobile';
+    if (/Chrome/i.test(ua)) return 'Google Chrome Desktop';
+    if (/Safari/i.test(ua) && /Mobile/i.test(ua)) return 'Apple Safari Mobile (iOS)';
+    if (/Safari/i.test(ua)) return 'Apple Safari Desktop (macOS)';
+    if (/Firefox/i.test(ua)) return 'Mozilla Firefox';
+    return 'Trình duyệt Web tiêu chuẩn';
+  })(),
   device: (() => {
     const ua = navigator.userAgent || '';
     let os = 'Khác';
-    if (/iPhone|iPad|iPod/i.test(ua)) os = 'iPhone/iPad (iOS)';
+    if (/iPhone|iPad|iPod/i.test(ua)) os = 'iOS (Apple iPhone/iPad)';
     else if (/Android/i.test(ua)) os = 'Android';
     else if (/Windows/i.test(ua)) os = 'Windows PC';
     else if (/Macintosh|Mac OS/i.test(ua)) os = 'Mac OS';
@@ -44,7 +71,33 @@ const TELEMETRY = {
 
     const form = /Mobi|Android|iPhone/i.test(ua) ? 'Di động (Mobile)' : 'Máy tính (Desktop)';
     const res = `${window.screen ? window.screen.width : 0}x${window.screen ? window.screen.height : 0}`;
-    return `${os} • ${form} • Màn hình: ${res}`;
+    const viewport = `${window.innerWidth}x${window.innerHeight}`;
+    const dpr = window.devicePixelRatio ? `${window.devicePixelRatio}x` : '';
+    const touch = ('ontouchstart' in window || navigator.maxTouchPoints > 0) ? 'Cảm ứng (Touch)' : 'Chuột / Bàn phím';
+    return `${os} • ${form} • Màn hình: ${res} (Viewport: ${viewport}, ${dpr}) • ${touch}`;
+  })(),
+  network: (() => {
+    try {
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      if (!conn) return 'Tiêu chuẩn (Trình duyệt không hỗ trợ Network API)';
+      const parts = [];
+      if (conn.effectiveType) parts.push(`Mạng: ${conn.effectiveType.toUpperCase()}`);
+      if (conn.downlink) parts.push(`Tốc độ: ~${conn.downlink} Mbps`);
+      if (conn.rtt) parts.push(`Độ trễ RTT: ${conn.rtt}ms`);
+      if (conn.saveData) parts.push(`Chế độ tiết kiệm: BẬT`);
+      return parts.join(' • ') || 'Tiêu chuẩn';
+    } catch (e) {
+      return 'Tiêu chuẩn';
+    }
+  })(),
+  locale: (() => {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Ho_Chi_Minh';
+      const lang = navigator.language || 'vi-VN';
+      return `Múi giờ: ${tz} • Ngôn ngữ: ${lang}`;
+    } catch (e) {
+      return 'vi-VN';
+    }
   })(),
   visitCount: (() => {
     try {
@@ -55,8 +108,23 @@ const TELEMETRY = {
       return 1;
     }
   })(),
+  orderCount: (() => {
+    try {
+      return parseInt(localStorage.getItem('muanh_orders_count') || '0', 10);
+    } catch (e) {
+      return 0;
+    }
+  })(),
+  sectionsViewed: [],
+  journeyBreadcrumb: [],
   interactions: new Set(),
   maxScroll: 0,
+
+  logSection(sectionName) {
+    if (!this.journeyBreadcrumb.includes(sectionName)) {
+      this.journeyBreadcrumb.push(sectionName);
+    }
+  },
 
   logInteraction(action) {
     this.interactions.add(action);
@@ -86,15 +154,33 @@ const TELEMETRY = {
     return m > 0 ? `${m} phút ${s} giây` : `${s} giây`;
   },
 
+  getActiveDuration() {
+    const sec = Math.floor(this.activeTime / 1000);
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return m > 0 ? `${m} phút ${s} giây` : `${s} giây`;
+  },
+
   getSummary() {
+    const visits = this.visitCount;
+    const orders = this.orderCount;
+    const historyStr = `Ghé thăm lần thứ ${visits} (${visits > 1 ? 'Khách quen quay lại' : 'Khách mới ghé thăm'})` + 
+      (orders > 0 ? ` • Đã từng đặt ${orders} đơn thành công` : ' • Chưa từng đặt hàng');
+
     return {
-      referrer: this.referrer,
+      trafficSource: this.referrer,
       utm: this.utm,
+      browserApp: this.browserApp,
       device: this.device,
-      duration: this.getDuration(),
-      visitCount: `Lần thứ ${this.visitCount} (${this.visitCount > 1 ? 'Khách hàng quay lại' : 'Khách mới ghé thăm'})`,
+      network: this.network,
+      locale: this.locale,
+      totalDuration: this.getDuration(),
+      activeDuration: this.getActiveDuration(),
+      durations: `Tổng: ${this.getDuration()} (Đọc trang thực tế: ${this.getActiveDuration()})`,
+      customerHistory: historyStr,
+      journey: this.journeyBreadcrumb.join(' ➔ ') || 'Đầu trang',
       maxScroll: `${this.maxScroll}% trang`,
-      interactions: Array.from(this.interactions).join(', ') || 'Chưa phát sinh tương tác'
+      interactions: Array.from(this.interactions).join(', ') || 'Chưa phát sinh tương tác khác'
     };
   }
 };
@@ -476,7 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
         _subject: `[ĐƠN HÀNG MỚI] Nem Chả Mụ Ánh - Khách: ${safeName} (${safePhone})`,
         _template: 'table',
         _captcha: 'false',
-        'Cơ sở': 'Nem Chả Mụ Ánh - 25/135 Đặng Văn Ngữ, An Cựu, Huế',
+        'Cơ sở tiếp nhận': 'Nem Chả Mụ Ánh - 25/135 Đặng Văn Ngữ, An Cựu, Huế',
         'Họ và tên khách hàng': safeName,
         'Số điện thoại nhận hàng': safePhone,
         'Địa chỉ giao hàng': safeAddress,
@@ -484,15 +570,19 @@ document.addEventListener('DOMContentLoaded', () => {
         'Số lượng': qty,
         'Ghi chú của khách': safeNote || 'Không có',
         'Các món trong giỏ hàng': cartSummary,
-        'Thời gian đặt': new Date().toLocaleString('vi-VN'),
-        '--- DỮ LIỆU PHÂN TÍCH KHÁCH HÀNG ---': '----------------------------------------',
-        'Nguồn giới thiệu (Referrer)': telemetrySummary.referrer,
-        'Chiến dịch quảng cáo (UTM)': telemetrySummary.utm,
+        'Thời gian đặt hàng': new Date().toLocaleString('vi-VN'),
+        '--- PHÂN TÍCH NGUỒN KHÁCH & HÀNH VI (TELEMETRY) ---': '----------------------------------------',
+        'Nguồn tiếp thị & Kênh đến': telemetrySummary.trafficSource,
+        'Chiến dịch quảng cáo (UTM / Ad ID)': telemetrySummary.utm,
+        'Ứng dụng & Trình duyệt': telemetrySummary.browserApp,
         'Thiết bị & Màn hình': telemetrySummary.device,
-        'Thời gian xem web trước khi đặt': telemetrySummary.duration,
-        'Lịch sử ghé thăm': telemetrySummary.visitCount,
+        'Kết nối mạng': telemetrySummary.network,
+        'Vị trí & Múi giờ': telemetrySummary.locale,
+        'Thời gian xem web trước khi chốt': telemetrySummary.durations,
+        'Hành trình nội dung đã xem': telemetrySummary.journey,
+        'Lịch sử ghé thăm & Đặt hàng': telemetrySummary.customerHistory,
         'Độ cuộn trang': telemetrySummary.maxScroll,
-        'Các tương tác trước khi đặt': telemetrySummary.interactions
+        'Lịch sử các thao tác đã thực hiện': telemetrySummary.interactions
       };
 
       try {
@@ -513,11 +603,39 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         console.warn('Dispatch logged:', err);
         localStorage.setItem('last_order_submitted_at', String(Date.now()));
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<span class="btn-submit-text">Xác Nhận Đặt Hàng Ngay ➔</span>';
+      }
+
+      // Optional Google Sheets Webhook Dispatch (100% Free)
+      try {
+        const sheetsUrl = localStorage.getItem('muanh_sheets_webhook');
+        if (sheetsUrl && sheetsUrl.startsWith('http')) {
+          fetch(sheetsUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          }).catch(e => console.warn('Sheets Webhook:', e));
         }
+      } catch (e) {}
+
+      // Record successful order in telemetry & cleanup draft
+      TELEMETRY.logInteraction('order_submitted');
+      TELEMETRY.orderCount += 1;
+      localStorage.setItem('muanh_orders_count', String(TELEMETRY.orderCount));
+
+      try {
+        const abandoned = JSON.parse(localStorage.getItem('muanh_abandoned_leads') || '[]');
+        const updated = abandoned.filter(l => l.phone !== safePhone);
+        localStorage.setItem('muanh_abandoned_leads', JSON.stringify(updated));
+      } catch (e) {}
+
+      localStorage.removeItem('muanh_order_draft');
+      const draftNotice = document.getElementById('form-draft-notice');
+      if (draftNotice) draftNotice.style.display = 'none';
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span class="btn-submit-text">Xác Nhận Đặt Hàng Ngay ➔</span>';
       }
 
       // Populate Success Modal safely with XSS escaped output
@@ -598,11 +716,128 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // Analytics & Interaction Telemetry Listeners
+  // ------------------------------------------------------------
+  // Lead Autosave & Abandonment Tracking (Draft Protection)
+  // ------------------------------------------------------------
+  const nameInput = document.getElementById('customer-name');
+  const phoneInput = document.getElementById('customer-phone');
+  const addressInput = document.getElementById('customer-address');
+  const noteInput = document.getElementById('order-note');
+  const draftNotice = document.getElementById('form-draft-notice');
+
+  // Pre-fill form from draft if available
+  try {
+    const draft = JSON.parse(localStorage.getItem('muanh_order_draft') || '{}');
+    if (draft.phone && phoneInput && !phoneInput.value) {
+      if (draft.name && nameInput) nameInput.value = draft.name;
+      phoneInput.value = draft.phone;
+      if (draft.address && addressInput) addressInput.value = draft.address;
+      if (draft.note && noteInput) noteInput.value = draft.note;
+      if (draftNotice) {
+        draftNotice.style.display = 'block';
+        draftNotice.innerHTML = '💡 <em>Hệ thống đã tự động khôi phục thông tin từ lần trước của quý khách.</em>';
+      }
+    }
+  } catch (e) {}
+
+  // Debounced draft and abandoned lead tracker
+  let draftTimer;
+  const handleDraftInput = () => {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(() => {
+      const name = nameInput?.value.trim() || '';
+      const phone = phoneInput?.value.trim() || '';
+      const address = addressInput?.value.trim() || '';
+      const note = noteInput?.value.trim() || '';
+
+      if (phone || name) {
+        TELEMETRY.logInteraction('Bắt đầu nhập thông tin đặt hàng');
+        localStorage.setItem('muanh_order_draft', JSON.stringify({
+          name, phone, address, note, updatedAt: Date.now()
+        }));
+
+        const cleanPhone = phone.replace(/\s|\./g, '');
+        if (cleanPhone.length >= 9) {
+          const abandoned = JSON.parse(localStorage.getItem('muanh_abandoned_leads') || '[]');
+          const existingIdx = abandoned.findIndex(l => l.phone === cleanPhone);
+          const leadData = {
+            name: name || 'Khách chưa điền tên',
+            phone: cleanPhone,
+            address: address || 'Chưa điền địa chỉ',
+            cart: cart.length > 0 ? cart.map(c => `${c.name} x${c.qty}`).join(', ') : 'Chưa chọn giỏ',
+            time: new Date().toLocaleString('vi-VN'),
+            timestamp: Date.now()
+          };
+          if (existingIdx >= 0) {
+            abandoned[existingIdx] = leadData;
+          } else {
+            abandoned.unshift(leadData);
+          }
+          localStorage.setItem('muanh_abandoned_leads', JSON.stringify(abandoned.slice(0, 20)));
+        }
+      }
+    }, 400);
+  };
+
+  [nameInput, phoneInput, addressInput, noteInput].forEach(inp => {
+    inp?.addEventListener('input', handleDraftInput);
+  });
+
+  // ------------------------------------------------------------
+  // Active Browsing Dwell Time Tracker
+  // ------------------------------------------------------------
+  setInterval(() => {
+    if (document.visibilityState === 'visible') {
+      const now = Date.now();
+      TELEMETRY.activeTime += (now - TELEMETRY.lastActiveStamp);
+      TELEMETRY.lastActiveStamp = now;
+    } else {
+      TELEMETRY.lastActiveStamp = Date.now();
+    }
+  }, 1000);
+  document.addEventListener('visibilitychange', () => {
+    TELEMETRY.lastActiveStamp = Date.now();
+  });
+
+  // ------------------------------------------------------------
+  // Section Journey Tracking (IntersectionObserver)
+  // ------------------------------------------------------------
+  const SECTION_MAP = {
+    'hero': 'Đầu trang & Điểm nổi bật',
+    'about': 'Câu chuyện gia truyền',
+    'menu': 'Thực đơn & Bảng giá',
+    'wholesale': 'Chính sách mua sỉ & Đại lý',
+    'commitments': '4 Cam kết chất lượng 0% hàn the',
+    'reviews': 'Đánh giá khách hàng',
+    'order': 'Form đặt hàng trực tuyến',
+    'faq': 'Câu hỏi thường gặp & Vận chuyển'
+  };
+
+  if ('IntersectionObserver' in window) {
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
+          const id = entry.target.id;
+          if (SECTION_MAP[id]) {
+            TELEMETRY.logSection(SECTION_MAP[id]);
+          }
+        }
+      });
+    }, { threshold: [0.25] });
+
+    Object.keys(SECTION_MAP).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) sectionObserver.observe(el);
+    });
+  }
+
+  // ------------------------------------------------------------
+  // Micro-Interaction Telemetry Listeners
+  // ------------------------------------------------------------
   // 1. Hotline Clicks
   document.querySelectorAll('a[href^="tel:"]').forEach(link => {
     link.addEventListener('click', () => {
-      window.trackEvent('click_hotline', { phone: '0912515329', source: link.id || 'hotline_link' });
+      window.trackEvent('click_hotline', { phone: '0912515329', source: link.id || link.className || 'hotline_link' });
     });
   });
 
@@ -620,8 +855,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const scrollPct = Math.min(100, Math.round((window.scrollY / docHeight) * 100));
       if (scrollPct > TELEMETRY.maxScroll) {
         TELEMETRY.maxScroll = scrollPct;
-        if (scrollPct >= 50 && !TELEMETRY.interactions.has('Đã cuộn 50%')) {
-          TELEMETRY.logInteraction('Đã cuộn 50%');
+        if (scrollPct >= 50 && !TELEMETRY.interactions.has('Đã cuộn 50% trang')) {
+          TELEMETRY.logInteraction('Đã cuộn 50% trang');
         }
         if (scrollPct >= 85 && !TELEMETRY.interactions.has('Đã xem cuối trang (85%+)')) {
           TELEMETRY.logInteraction('Đã xem cuối trang (85%+)');
@@ -630,31 +865,123 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: true });
 
-  // 4. Admin Analytics Modal Management
+  // 4. Copy Phone or Address to Clipboard Listener
+  document.addEventListener('copy', () => {
+    const text = window.getSelection()?.toString() || '';
+    if (text.includes('0912') || text.includes('Đặng Văn Ngữ')) {
+      TELEMETRY.logInteraction('Sao chép SĐT hoặc địa chỉ quán');
+    }
+  });
+
+  // ------------------------------------------------------------
+  // Upgraded Admin Analytics Dashboard Management
+  // ------------------------------------------------------------
   function renderAnalyticsModal() {
     const stats = TELEMETRY.getStats();
     const summary = TELEMETRY.getSummary();
+    const abandonedLeads = JSON.parse(localStorage.getItem('muanh_abandoned_leads') || '[]');
 
+    // Metric boxes
     const viewsEl = document.getElementById('stat-views');
     const hotlineEl = document.getElementById('stat-hotline');
     const zaloEl = document.getElementById('stat-zalo');
     const cartEl = document.getElementById('stat-cart');
-    const infoEl = document.getElementById('analytics-session-info');
+    const ordersEl = document.getElementById('stat-orders');
+    const cvrEl = document.getElementById('stat-cvr');
 
     if (viewsEl) viewsEl.textContent = TELEMETRY.visitCount;
     if (hotlineEl) hotlineEl.textContent = stats['click_hotline'] || 0;
     if (zaloEl) zaloEl.textContent = stats['click_zalo'] || 0;
     if (cartEl) cartEl.textContent = stats['add_to_cart'] || 0;
+    if (ordersEl) ordersEl.textContent = TELEMETRY.orderCount;
+    if (cvrEl) {
+      const cvr = TELEMETRY.visitCount > 0 ? ((TELEMETRY.orderCount / TELEMETRY.visitCount) * 100).toFixed(1) : 0;
+      cvrEl.textContent = `${cvr}%`;
+    }
 
+    // Conversion Funnel Bar
+    const funnelContainer = document.getElementById('analytics-funnel-steps');
+    if (funnelContainer) {
+      const totalVisits = TELEMETRY.visitCount;
+      const menuViews = TELEMETRY.journeyBreadcrumb.includes('Thực đơn & Bảng giá') ? totalVisits : Math.max(1, totalVisits - 1);
+      const cartAdds = stats['add_to_cart'] || 0;
+      const contactClicks = (stats['click_hotline'] || 0) + (stats['click_zalo'] || 0);
+      const orders = TELEMETRY.orderCount;
+
+      funnelContainer.innerHTML = `
+        <div class="funnel-step-item">
+          <strong>${totalVisits}</strong>
+          <span>Ghé thăm</span>
+        </div>
+        <span class="funnel-arrow">➔</span>
+        <div class="funnel-step-item">
+          <strong>${menuViews}</strong>
+          <span>Xem món</span>
+        </div>
+        <span class="funnel-arrow">➔</span>
+        <div class="funnel-step-item">
+          <strong>${cartAdds}</strong>
+          <span>Thêm giỏ</span>
+        </div>
+        <span class="funnel-arrow">➔</span>
+        <div class="funnel-step-item">
+          <strong>${contactClicks}</strong>
+          <span>Gọi/Zalo</span>
+        </div>
+        <span class="funnel-arrow">➔</span>
+        <div class="funnel-step-item" style="border-color:#10b981; background:#ecfdf5;">
+          <strong style="color:#059669;">${orders}</strong>
+          <span style="color:#047857; font-weight:600;">Chốt đơn</span>
+        </div>
+      `;
+    }
+
+    // Abandoned Leads List
+    const leadsBadge = document.getElementById('abandoned-leads-badge');
+    const leadsContainer = document.getElementById('analytics-abandoned-list');
+    if (leadsBadge) leadsBadge.textContent = `${abandonedLeads.length} số`;
+
+    if (leadsContainer) {
+      if (abandonedLeads.length === 0) {
+        leadsContainer.innerHTML = `<p style="font-size:0.8rem; color:var(--text-muted); margin:4px 0;">Chưa có khách hàng nào bỏ dở đơn hàng.</p>`;
+      } else {
+        leadsContainer.innerHTML = abandonedLeads.map(lead => `
+          <div class="abandoned-lead-item">
+            <div class="lead-meta">
+              <strong>${escapeHTML(lead.name)} • ${escapeHTML(lead.phone)}</strong>
+              <p>Món quan tâm: ${escapeHTML(lead.cart)} • ${escapeHTML(lead.time)}</p>
+            </div>
+            <div class="lead-actions">
+              <a href="tel:${escapeHTML(lead.phone)}" class="lead-act-btn lead-act-call" title="Gọi lại chốt đơn">📞 Gọi</a>
+              <a href="https://zalo.me/${escapeHTML(lead.phone)}" target="_blank" rel="noopener" class="lead-act-btn lead-act-zalo" title="Nhắn tin Zalo">💬 Zalo</a>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Session Info Details
+    const infoEl = document.getElementById('analytics-session-info');
     if (infoEl) {
       infoEl.innerHTML = `
-        <p><strong>Nguồn giới thiệu:</strong> ${escapeHTML(summary.referrer)}</p>
-        <p><strong>Chiến dịch (UTM):</strong> ${escapeHTML(summary.utm)}</p>
+        <p><strong>Nguồn & Kênh đến:</strong> ${escapeHTML(summary.trafficSource)}</p>
+        <p><strong>Chiến dịch (UTM / Ad ID):</strong> ${escapeHTML(summary.utm)}</p>
+        <p><strong>Ứng dụng & Trình duyệt:</strong> ${escapeHTML(summary.browserApp)}</p>
         <p><strong>Thiết bị & Màn hình:</strong> ${escapeHTML(summary.device)}</p>
-        <p><strong>Thời gian duyệt web:</strong> ${escapeHTML(summary.duration)}</p>
+        <p><strong>Kết nối mạng:</strong> ${escapeHTML(summary.network)}</p>
+        <p><strong>Vị trí & Múi giờ:</strong> ${escapeHTML(summary.locale)}</p>
+        <p><strong>Thời gian đọc web:</strong> ${escapeHTML(summary.durations)}</p>
+        <p><strong>Hành trình nội dung đã xem:</strong> ${escapeHTML(summary.journey)}</p>
+        <p><strong>Lịch sử khách hàng:</strong> ${escapeHTML(summary.customerHistory)}</p>
         <p><strong>Độ sâu cuộn trang:</strong> ${escapeHTML(summary.maxScroll)}</p>
         <p><strong>Nhật ký tương tác:</strong> ${escapeHTML(summary.interactions)}</p>
       `;
+    }
+
+    // Pre-fill Google Sheets Webhook URL
+    const webhookInput = document.getElementById('sheets-webhook-input');
+    if (webhookInput) {
+      webhookInput.value = localStorage.getItem('muanh_sheets_webhook') || '';
     }
 
     document.getElementById('analytics-modal')?.classList.add('active');
@@ -664,12 +991,55 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('analytics-modal')?.classList.remove('active');
   }
 
+  // Modal triggers
   document.getElementById('analytics-close-btn')?.addEventListener('click', closeAnalyticsModal);
+
+  // Save Google Sheets Webhook URL
+  document.getElementById('sheets-webhook-save-btn')?.addEventListener('click', () => {
+    const val = document.getElementById('sheets-webhook-input')?.value.trim() || '';
+    localStorage.setItem('muanh_sheets_webhook', val);
+    const msg = document.getElementById('webhook-status-msg');
+    if (msg) {
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, 2500);
+    }
+  });
+
+  // Export Analytics to JSON File
+  document.getElementById('analytics-export-btn')?.addEventListener('click', () => {
+    const exportData = {
+      brand: 'Nem Chả Mụ Ánh',
+      exportedAt: new Date().toISOString(),
+      lifetimeMetrics: {
+        visits: TELEMETRY.visitCount,
+        orders: TELEMETRY.orderCount,
+        stats: TELEMETRY.getStats()
+      },
+      currentSession: TELEMETRY.getSummary(),
+      abandonedLeads: JSON.parse(localStorage.getItem('muanh_abandoned_leads') || '[]'),
+      recentDraft: JSON.parse(localStorage.getItem('muanh_order_draft') || '{}')
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `nem-cha-mu-anh-analytics-${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  // Reset Metrics
   document.getElementById('analytics-reset-btn')?.addEventListener('click', () => {
     if (confirm('Đặt lại toàn bộ số liệu thống kê trên trình duyệt này?')) {
       localStorage.removeItem('muanh_stats');
       localStorage.setItem('muanh_visits', '1');
+      localStorage.setItem('muanh_orders_count', '0');
+      localStorage.removeItem('muanh_abandoned_leads');
       TELEMETRY.interactions.clear();
+      TELEMETRY.journeyBreadcrumb = ['Đầu trang & Điểm nổi bật'];
       renderAnalyticsModal();
     }
   });
