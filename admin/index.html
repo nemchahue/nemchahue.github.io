@@ -700,7 +700,7 @@
         <span>📢</span> Biểu Ngữ & Bán Sỉ
       </button>
       <button class="nav-tab-btn" data-tab="tab-banking" id="tab-btn-banking">
-        <span>💳</span> Thanh Toán & VietQR
+        <span>💳</span> Phương Thức Thanh Toán
       </button>
       <button class="nav-tab-btn" data-tab="tab-orders" id="tab-btn-orders">
         <span>📋</span> Đơn Hàng & Khách
@@ -909,45 +909,46 @@
         </div>
       </section>
 
-      <!-- TAB 5: BANKING & VIETQR -->
+      <!-- TAB 5: PAYMENT & BANKING -->
       <section class="tab-content" id="tab-banking">
         <div class="panel">
           <div class="panel-header">
-            <h2 class="panel-title">💳 Thông Tin Tài Khoản Ngân Hàng & VietQR</h2>
+            <h2 class="panel-title">💳 Thiết Lập Phương Thức Thanh Toán</h2>
             <button class="btn btn-gold btn-sm" onclick="saveStoreConfig()">Lưu Thay Đổi</button>
           </div>
-          <div class="form-grid-2">
-            <div class="form-group">
-              <label for="bank-name">Tên Ngân Hàng</label>
-              <input type="text" id="bank-name" placeholder="Vietcombank" oninput="updateVietQRPreview()">
+
+          <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: var(--radius-md); padding: 18px 22px; margin-bottom: 22px;">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span class="status-badge cancelled">❌ THANH TOÁN QR: TẠM THỜI CHƯA KHẢ DỤNG</span>
             </div>
-            <div class="form-group">
-              <label for="bank-code">Mã Ngân Hàng (VCB, MB, TCB, ACB...)</label>
-              <input type="text" id="bank-code" placeholder="VCB" oninput="updateVietQRPreview()">
-            </div>
-            <div class="form-group">
-              <label for="bank-acc-num">Số Tài Khoản</label>
-              <input type="text" id="bank-acc-num" placeholder="0123456789" oninput="updateVietQRPreview()">
-            </div>
-            <div class="form-group">
-              <label for="bank-acc-holder">Tên Chủ Tài Khoản (Không dấu in hoa)</label>
-              <input type="text" id="bank-acc-holder" placeholder="NEM CHA MU ANH" oninput="updateVietQRPreview()">
-            </div>
-            <div class="form-group col-span-2">
-              <label for="bank-syntax">Cú Pháp Chuyển Khoản Mẫu</label>
-              <input type="text" id="bank-syntax" placeholder="NEMCHAMUANH [SĐT Khách]">
-            </div>
+            <p style="color: #fca5a5; font-size: 0.9rem; line-height: 1.5; margin: 0;">
+              Chức năng thanh toán qua mã QR đã được <strong>tắt hoàn toàn</strong>. Website hiện tại <strong>chỉ áp dụng thanh toán tiền mặt khi nhận hàng (COD)</strong> hoặc trao đổi trực tiếp qua Hotline / Zalo <code>0912.515.329</code> đối với đơn sỉ & đại lý.
+            </p>
           </div>
 
-          <div style="margin-top: 16px;">
-            <label style="display: block; margin-bottom: 8px;">Xem Trước Mã VietQR Tự Động:</label>
-            <div class="qr-preview-box">
-              <img id="vietqr-img" src="https://img.vietqr.io/image/VCB-0123456789-compact.png?amount=0&addInfo=NEMCHAMUANH" alt="VietQR">
-              <div>
-                <strong style="color: #fff; font-size: 1rem;" id="qr-bank-label">Vietcombank - 0123456789</strong>
-                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 4px 0;" id="qr-holder-label">Chủ TK: NEM CHA MU ANH</p>
-                <p style="color: var(--primary-light); font-size: 0.8rem;">✓ Tự động tích hợp chuẩn NAPAS 24/7 quét nhanh trên mọi app ngân hàng</p>
-              </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="bank-status-select">Trạng Thái Thanh Toán Chuyển Khoản</label>
+              <select id="bank-status-select">
+                <option value="unavailable" selected>❌ TẮT / Chưa khả dụng (Chỉ áp dụng COD tiền mặt)</option>
+                <option value="enabled">Kích hoạt (Khi có tài khoản ngân hàng chính thức)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="bank-notice">Thông Báo Hiển Thị Với Khách Hàng</label>
+              <input type="text" id="bank-notice" value="Tạm thời chưa áp dụng chuyển khoản qua mã QR. Quý khách vui lòng thanh toán khi nhận hàng (COD).">
+            </div>
+            <div class="form-group">
+              <label for="bank-name">Tên Ngân Hàng (Tùy chọn)</label>
+              <input type="text" id="bank-name" placeholder="Để trống (Chưa áp dụng)">
+            </div>
+            <div class="form-group">
+              <label for="bank-acc-num">Số Tài Khoản (Tùy chọn)</label>
+              <input type="text" id="bank-acc-num" placeholder="Để trống (Chưa áp dụng)">
+            </div>
+            <div class="form-group col-span-2">
+              <label for="bank-acc-holder">Tên Chủ Tài Khoản (Tùy chọn)</label>
+              <input type="text" id="bank-acc-holder" placeholder="Để trống (Chưa áp dụng)">
             </div>
           </div>
         </div>
@@ -1323,28 +1324,20 @@
     function renderBankingForm() {
       if (!storeConfig || !storeConfig.banking) return;
       const b = storeConfig.banking;
-      document.getElementById('bank-name').value = b.bank_name || '';
-      document.getElementById('bank-code').value = b.bank_code || '';
-      document.getElementById('bank-acc-num').value = b.account_number || '';
-      document.getElementById('bank-acc-holder').value = b.account_holder || '';
-      document.getElementById('bank-syntax').value = b.transfer_syntax || '';
-      updateVietQRPreview();
-    }
-
-    function updateVietQRPreview() {
-      const code = document.getElementById('bank-code')?.value.trim() || 'VCB';
-      const num = document.getElementById('bank-acc-num')?.value.trim() || '0123456789';
-      const holder = document.getElementById('bank-acc-holder')?.value.trim() || 'NEM CHA MU ANH';
-      const name = document.getElementById('bank-name')?.value.trim() || 'Vietcombank';
-
-      const img = document.getElementById('vietqr-img');
-      if (img) {
-        img.src = `https://img.vietqr.io/image/${code}-${num}-compact.png?amount=0&addInfo=NEMCHAMUANH`;
+      const statusSelect = document.getElementById('bank-status-select');
+      if (statusSelect) {
+        statusSelect.value = b.status || (b.enabled ? 'enabled' : 'unavailable');
       }
-      const label = document.getElementById('qr-bank-label');
-      if (label) label.innerText = `${name} - ${num}`;
-      const hlabel = document.getElementById('qr-holder-label');
-      if (hlabel) hlabel.innerText = `Chủ TK: ${holder}`;
+      const noticeInput = document.getElementById('bank-notice');
+      if (noticeInput) {
+        noticeInput.value = b.notice || 'Tạm thời chưa áp dụng chuyển khoản qua mã QR. Quý khách vui lòng thanh toán khi nhận hàng (COD).';
+      }
+      const nameInput = document.getElementById('bank-name');
+      if (nameInput) nameInput.value = b.bank_name || '';
+      const numInput = document.getElementById('bank-acc-num');
+      if (numInput) numInput.value = b.account_number || '';
+      const holderInput = document.getElementById('bank-acc-holder');
+      if (holderInput) holderInput.value = b.account_holder || '';
     }
 
     function renderProductsAdmin() {
@@ -1416,12 +1409,17 @@
       };
 
       // Extract Banking
+      // Extract Banking (marked as unavailable)
+      const isBankEnabled = document.getElementById('bank-status-select')?.value === 'enabled';
       storeConfig.banking = {
-        bank_name: document.getElementById('bank-name').value.trim(),
-        bank_code: document.getElementById('bank-code').value.trim(),
-        account_number: document.getElementById('bank-acc-num').value.trim(),
-        account_holder: document.getElementById('bank-acc-holder').value.trim(),
-        transfer_syntax: document.getElementById('bank-syntax').value.trim()
+        enabled: isBankEnabled,
+        status: document.getElementById('bank-status-select')?.value || 'unavailable',
+        notice: document.getElementById('bank-notice')?.value.trim() || 'Tạm thời chưa áp dụng chuyển khoản qua mã QR.',
+        bank_name: document.getElementById('bank-name')?.value.trim() || '',
+        bank_code: '',
+        account_number: document.getElementById('bank-acc-num')?.value.trim() || '',
+        account_holder: document.getElementById('bank-acc-holder')?.value.trim() || '',
+        transfer_syntax: ''
       };
 
       try {

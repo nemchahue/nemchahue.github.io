@@ -96,11 +96,14 @@ DEFAULT_CONFIG = {
         "support_notes": "Chuyên cung cấp sỉ cho nhà hàng, quán bún bò Huế, tiệc cưới, đại lý và quà biếu doanh nghiệp toàn quốc."
     },
     "banking": {
-        "bank_name": "Vietcombank",
-        "bank_code": "VCB",
-        "account_number": "0123456789",
-        "account_holder": "NEM CHA MU ANH",
-        "transfer_syntax": "NEMCHAMUANH [SĐT Khách]"
+        "enabled": False,
+        "status": "unavailable",
+        "notice": "Tạm thời chưa áp dụng chuyển khoản qua mã QR. Quý khách vui lòng thanh toán tiền mặt khi nhận hàng (COD) hoặc liên hệ trực tiếp Hotline/Zalo 0912.515.329.",
+        "bank_name": "",
+        "bank_code": "",
+        "account_number": "",
+        "account_holder": "",
+        "transfer_syntax": ""
     },
     "products": [
         {
