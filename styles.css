@@ -299,6 +299,7 @@ button {
   display: flex;
   align-items: center;
   gap: 12px;
+  text-decoration: none;
 }
 .logo-emblem {
   background: linear-gradient(135deg, var(--primary) 0%, var(--gold) 100%);
@@ -310,6 +311,8 @@ button {
   border-radius: var(--radius-sm);
   box-shadow: 0 4px 10px rgba(148, 27, 27, 0.25);
   letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .logo-text {
   display: flex;
@@ -322,12 +325,14 @@ button {
   color: var(--primary);
   line-height: 1.1;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 .brand-subtitle {
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--gold-dark);
   letter-spacing: 1.5px;
+  white-space: nowrap;
 }
 
 .nav-links {
@@ -1525,63 +1530,581 @@ button {
   gap: 10px;
 }
 
-/* Responsive Breakpoints */
+/* ==============================================================================
+   RESPONSIVE DESIGN SYSTEM (MOBILE, TABLET & DESKTOP)
+   ============================================================================== */
+
+/* Base state for Mobile Bottom Navigation (Hidden on Desktop) */
+.mobile-bottom-bar {
+  display: none;
+}
+
+/* Tablet Breakpoint (max-width: 992px) */
 @media (max-width: 992px) {
   .hero-grid, .about-grid, .order-box-container {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 36px;
   }
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
+  }
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .guide-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .wholesale-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
   .footer-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 30px;
   }
 }
 
+/* Mobile & Small Tablet Breakpoint (max-width: 768px) */
 @media (max-width: 768px) {
+  /* Reserve bottom space for Mobile Sticky Bottom Bar */
+  body {
+    padding-bottom: 68px;
+  }
+
+  /* Compact Top Announcement Bar */
+  .top-banner {
+    padding: 6px 0;
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
   .top-banner-content {
     justify-content: center;
     text-align: center;
+    gap: 6px;
   }
-  .nav-links {
-    display: none;
-    position: absolute;
-    top: 76px;
-    left: 0;
-    width: 100%;
-    background: #FFF;
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: var(--shadow-md);
-    border-bottom: 1px solid var(--border-color);
+  .top-banner-contacts {
+    display: none; /* Keep top banner 1-line on mobile */
   }
-  .nav-links.mobile-open {
+
+  /* Sticky Compact Header (Prevents logo clipping or tall block wrapping) */
+  .site-header {
+    height: 60px;
+  }
+  .header-container {
+    height: 60px;
+    padding: 0 12px;
+    gap: 8px;
+  }
+  .brand-logo {
     display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    flex: 1 1 auto;
   }
-  .menu-toggle-btn {
-    display: block;
+  .logo-emblem {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1.2;
+    box-shadow: 0 2px 6px rgba(148, 27, 27, 0.2);
+  }
+  .logo-text {
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .brand-title {
+    font-size: 0.96rem;
+    font-weight: 800;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.15;
+  }
+  .brand-subtitle {
+    font-size: 0.58rem;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .cart-btn {
+    height: 38px;
+    padding: 0 10px;
+    font-size: 0.85rem;
+    border-radius: 20px;
+    gap: 4px;
   }
   .cart-text {
     display: none;
   }
+  .menu-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    font-size: 1.25rem;
+    border-radius: 8px;
+    padding: 0;
+  }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #FFF;
+    flex-direction: column;
+    padding: 16px 20px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid var(--border-color);
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
+    gap: 12px;
+  }
+  .nav-links.mobile-open {
+    display: flex;
+  }
+  .nav-link {
+    padding: 10px 0;
+    font-size: 1rem;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.06);
+  }
+  .nav-link:last-child {
+    border-bottom: none;
+  }
+
+  /* Breadcrumb Mobile Scrolling */
+  .breadcrumb-nav {
+    padding: 6px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .breadcrumb-list {
+    flex-wrap: nowrap;
+    font-size: 0.74rem;
+    white-space: nowrap;
+    padding-bottom: 2px;
+  }
+  .breadcrumb-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Sections & Spacing Scaling */
+  .section {
+    padding: 42px 0;
+  }
+  .container {
+    padding: 0 14px;
+  }
+  .section-tag {
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-size: clamp(1.35rem, 5.5vw, 1.75rem);
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+  .section-desc {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+
+  /* Hero Section Mobile */
+  .hero-section {
+    padding: 24px 0 36px;
+  }
+  .hero-badge {
+    font-size: 0.74rem;
+    padding: 4px 10px;
+  }
   .hero-title {
-    font-size: 2.1rem;
+    font-size: clamp(1.6rem, 6.5vw, 2.1rem);
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .hero-description {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .hero-usps {
+    gap: 6px;
+    margin: 16px 0;
+    justify-content: flex-start;
+  }
+  .usp-pill {
+    padding: 5px 10px;
+    font-size: 0.74rem;
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .hero-actions .btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 12px 8px;
+    gap: 4px;
+    margin-top: 24px;
+  }
+  .stat-divider {
+    display: none;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-item strong {
+    font-size: 1.05rem;
+  }
+  .stat-item span {
+    font-size: 0.68rem;
   }
   .floating-tag {
     display: none;
   }
-  .footer-grid {
-    grid-template-columns: 1fr;
+
+  /* Horizontal Category Tabs */
+  .category-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    justify-content: flex-start;
+    gap: 8px;
+    margin: 18px 0 24px;
+    padding: 4px 2px 10px;
+    scrollbar-width: none;
   }
-  .btn-text {
+  .category-tabs::-webkit-scrollbar {
     display: none;
   }
-  .float-btn {
-    width: 48px;
-    height: 48px;
-    padding: 0;
+  .cat-btn {
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Products Grid Mobile (1 Column clean cards) */
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .product-info {
+    padding: 16px;
+  }
+  .product-name {
+    font-size: 1.05rem;
+  }
+
+  /* Wholesale Cards Mobile */
+  .wholesale-banner {
+    padding: 24px 14px;
+  }
+  .wholesale-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .wholesale-card {
+    padding: 20px 16px;
+  }
+  .ws-features li {
+    font-size: 0.82rem;
+  }
+
+  /* Guide / Helpful Content Mobile */
+  .guide-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .guide-card {
+    padding: 18px 16px;
+  }
+  .guide-card h3 {
+    font-size: 1rem;
+  }
+  .guide-card p {
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+
+  /* Quality Cards (2x2 grid) */
+  .quality-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .quality-card {
+    padding: 16px 10px;
+  }
+  .q-icon {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+  .quality-card h3 {
+    font-size: 0.95rem;
+  }
+  .quality-card p {
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  /* Reviews Mobile */
+  .reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  .review-card {
+    padding: 20px 16px;
+  }
+  .review-quote {
+    font-size: 0.88rem;
+  }
+
+  /* FAQ Accordion Mobile (Clean, touch-friendly, no overlap) */
+  .accordion {
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .accordion-header {
+    padding: 13px 14px;
+    font-size: 0.92rem;
+    gap: 10px;
+  }
+  .accordion-header span {
+    line-height: 1.4;
+    word-break: break-word;
+  }
+  .acc-icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .accordion-body {
+    padding: 0 14px;
+  }
+  .accordion-item.active .accordion-body {
+    padding: 12px 14px 16px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  /* Order Box Mobile */
+  .order-box-container {
+    padding: 20px 14px;
+    gap: 24px;
+  }
+  .order-form {
+    padding: 20px 14px;
+  }
+  /* Prevent iOS Safari input autozoom */
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px !important;
+    padding: 10px 12px;
+  }
+  .btn-qty {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Footer Mobile */
+  .site-footer {
+    padding: 45px 0 0;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding-bottom: 36px;
+  }
+  .footer-bottom-flex {
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+  }
+
+  /* ------------------------------------------------------------
+     STICKY MOBILE BOTTOM NAVIGATION BAR & FLOATING ACTIONS
+     ------------------------------------------------------------ */
+  /* Hide the old floating call/zalo round buttons on mobile (they are now in the bottom bar) */
+  .floating-actions .zalo-btn,
+  .floating-actions .call-btn {
+    display: none !important;
+  }
+  .floating-actions {
+    position: fixed;
+    bottom: 72px;
+    right: 14px;
+    z-index: 998;
+    margin: 0;
+    gap: 0;
+  }
+  .top-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 0.85rem;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    background: var(--text-main);
+  }
+
+  /* Sleek, thumb-friendly Mobile Bottom Bar */
+  .mobile-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #FFFFFF;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .mob-bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    flex: 1;
+    height: 100%;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.68rem;
+    font-weight: 600;
+    gap: 3px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 2px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mob-bar-item:active {
+    opacity: 0.7;
+  }
+  .mob-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+  .mob-icon-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mob-badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: var(--primary);
+    color: #FFF;
+    font-size: 0.65rem;
+    font-weight: 800;
+    min-width: 17px;
+    height: 17px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 1.5px solid #FFF;
+  }
+  .mob-call-item .mob-icon {
+    color: var(--emerald);
+  }
+  .mob-zalo-item .mob-icon {
+    color: #0068FF;
+  }
+  .mob-order-cta {
+    background: linear-gradient(135deg, var(--primary) 0%, #B91C1C 100%);
+    color: #FFF !important;
+    border-radius: 24px;
+    height: 42px;
+    flex-direction: row;
+    gap: 6px;
+    padding: 0 14px;
+    flex: 1.35;
+    font-size: 0.82rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(148, 27, 27, 0.3);
+  }
+  .mob-cta-icon {
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Smartphone Breakpoint (max-width: 480px - iPhone SE, Galaxy A, Messenger Webview) */
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0 10px;
+    gap: 6px;
+  }
+  .logo-emblem {
+    padding: 3px 6px;
+    font-size: 0.74rem;
+    border-radius: 5px;
+  }
+  .brand-title {
+    font-size: 0.88rem;
+  }
+  .brand-subtitle {
+    font-size: 0.52rem;
+  }
+  .cart-btn {
+    height: 36px;
+    padding: 0 8px;
+    font-size: 0.8rem;
+  }
+  .menu-toggle-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.15rem;
+  }
+  .section-title {
+    font-size: 1.35rem;
+  }
+  .accordion-header {
+    padding: 12px 12px;
+    font-size: 0.88rem;
+  }
+  .accordion-body p {
+    font-size: 0.84rem;
+  }
+  .mob-order-cta {
+    font-size: 0.78rem;
+    padding: 0 10px;
   }
 }
 

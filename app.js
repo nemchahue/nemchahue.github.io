@@ -375,8 +375,10 @@ function updateCartUI() {
   // Update badge count
   const headerCount = document.getElementById('header-cart-count');
   const drawerCount = document.getElementById('cart-drawer-count');
+  const mobCount = document.getElementById('mob-cart-count');
   if (headerCount) headerCount.textContent = totalCount;
   if (drawerCount) drawerCount.textContent = totalCount;
+  if (mobCount) mobCount.textContent = totalCount;
 
   // Update Drawer Items
   const container = document.getElementById('cart-items-container');
@@ -505,6 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Drawer triggers
   document.getElementById('open-cart-btn')?.addEventListener('click', openCartDrawer);
+  document.getElementById('mob-cart-btn')?.addEventListener('click', openCartDrawer);
   document.getElementById('close-cart-btn')?.addEventListener('click', closeCartDrawer);
   document.getElementById('cart-drawer-overlay')?.addEventListener('click', closeCartDrawer);
 

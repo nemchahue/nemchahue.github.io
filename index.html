@@ -1178,7 +1178,7 @@
     </div>
   </div>
 
-  <!-- Floating Quick Action Buttons -->
+  <!-- Floating Quick Action Buttons (Desktop / Tablet) -->
   <div class="floating-actions">
     <a href="https://zalo.me/0912515329" target="_blank" rel="noopener" class="float-btn zalo-btn" title="Chat Zalo Tư Vấn">
       <span class="btn-text">Zalo: 0912.515.329</span>
@@ -1188,10 +1188,33 @@
       <span class="btn-text">0912.515.329</span>
       <span class="float-icon">📞</span>
     </a>
-    <button class="float-btn top-btn" id="scroll-to-top" title="Lên đầu trang">
+    <button class="float-btn top-btn" id="scroll-to-top" title="Lên đầu trang" aria-label="Lên đầu trang">
       ▲
     </button>
   </div>
+
+  <!-- Mobile Sticky Bottom Navigation Bar (Thumb-zone optimized for mobile & tablet) -->
+  <nav class="mobile-bottom-bar" id="mobile-bottom-bar" aria-label="Thanh điều hướng di động">
+    <a href="tel:0912515329" class="mob-bar-item mob-call-item" id="mob-call-btn">
+      <span class="mob-icon">📞</span>
+      <span class="mob-label">Gọi Hotline</span>
+    </a>
+    <a href="https://zalo.me/0912515329" target="_blank" rel="noopener" class="mob-bar-item mob-zalo-item" id="mob-zalo-btn">
+      <span class="mob-icon">💬</span>
+      <span class="mob-label">Chat Zalo</span>
+    </a>
+    <button type="button" class="mob-bar-item mob-cart-item" id="mob-cart-btn" aria-label="Xem giỏ hàng">
+      <div class="mob-icon-wrap">
+        <span class="mob-icon">🛒</span>
+        <span class="mob-badge" id="mob-cart-count">0</span>
+      </div>
+      <span class="mob-label">Giỏ Hàng</span>
+    </button>
+    <a href="#order" class="mob-bar-item mob-order-cta" id="mob-order-btn">
+      <span class="mob-cta-icon">⚡</span>
+      <span class="mob-cta-text">Đặt Hàng</span>
+    </a>
+  </nav>
 
   <!-- Footer -->
   <footer class="site-footer">
