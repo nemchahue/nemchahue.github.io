@@ -65,15 +65,17 @@
 
 Danh mục từ khóa tìm kiếm và tên gọi phổ biến của người tiêu dùng:
 
-### 1. Tìm Kiếm Tiếng Việt Không Dấu (Unaccented Search)
-- `nem cha mu anh`, `nem chua mu anh`, `cha bo mu anh`, `cha lua mu anh`, `tre hue mu anh`
+### 1. Tìm Kiếm Tiếng Việt Không Dấu & Danh Xưng Thương Hiệu (Unaccented Search & Brand Aliases)
+- `nem cha mu anh`, `mu anh`, `nem chua mu anh`, `cha bo mu anh`, `cha lua mu anh`, `tre hue mu anh`
+- `gio cha ba anh`, `nem cha ba anh`, `nem ba anh`, `ba anh`, `madame anh`, `madame anh hue`
+- `gio cha ong tu`, `gio cha nha ong tu`, `nem cha ong tu`, `lo nem cha ong tu hue`
 - `nem cha mu anh dang van ngu`, `nem cha mu anh hue`, `dia chi nem cha mu anh hue`
-- `nem cha ba anh`, `nem chua ba anh`, `cha bo ba anh`, `nem ba anh hue`
-- `gio cha mu anh`, `gio cha ba anh`, `gio bo mu anh`, `gio lua mu anh`, `gio cha hue`
+- `gio cha mu anh`, `gio bo mu anh`, `gio lua mu anh`, `gio cha hue`
 - `nem cha hue ngon o hue`, `mua nem cha hue o dau`, `dac san hue lam qua`, `nem cha gia truyen hue`
 
-### 2. Từ Khóa Phương Ngữ 3 Miền (Dialect & Regional Synonyms)
+### 2. Từ Khóa Phương Ngữ 3 Miền & Danh Xưng Tiền Bối (Dialect, Regional Synonyms & Heritage)
 - **Miền Trung / Huế:** `Mụ Ánh` (từ kính trọng chỉ bà/bác gái xứ Huế), `Tré Huế`, `Ché Huế`, `Nem chua gói lá chuối`, `Ớt xiêm xanh Cố Đô`.
+- **Thương hiệu truyền thống gia đình:** `Giò Chả Bà Ánh`, `Madame Ánh`, danh xưng làng nghề gia truyền `Giò Chả Ông Tư`, `Giò Chả Nhà Ông Tư` tại đường Đặng Văn Ngữ, An Cựu, Huế.
 - **Miền Bắc:** Thường tìm kiếm `giò chả` thay vì `chả`: `Giò lụa Huế`, `Giò bò Huế`, `Giò tai`, `Giò Mụ Ánh`, `Giò chả Bà Ánh`, `Giò bò tiêu sọ`.
 - **Miền Nam:** `Chả lụa quết`, `Nem chua Huế biếu Tết`, `Tré trộn tỏi ớt rau răm`, `Chả bò Đà Nẵng / Huế`.
 
