@@ -3,33 +3,38 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://nemchahue.github.io/</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-10-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://nemchahue.github.io/assets/images/hero.jpg</image:loc>
-      <image:title>Nem Chả Mụ Ánh Đặc Sản Cố Đô Gia Truyền</image:title>
+      <image:title>Nem Chả Mụ Ánh - Đặc Sản Cố Đô Huế Gia Truyền 100% Thịt Tươi Sạch</image:title>
+      <image:caption>Mẹt nem chả Huế gia truyền Mụ Ánh tại 25/135 Đặng Văn Ngữ, An Cựu, Huế - 100% không hàn the</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://nemchahue.github.io/assets/images/nem-chua.jpg</image:loc>
-      <image:title>Nem Chua Mụ Ánh Truyền Thống</image:title>
+      <image:title>Nem Chua Huế Mụ Ánh Truyền Thống Gói Lá Chuối</image:title>
+      <image:caption>Nem chua Cố Đô lên men tự nhiên, kèm tỏi Lý Sơn và ớt xiêm xanh Cố Đô</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://nemchahue.github.io/assets/images/cha-bo.jpg</image:loc>
-      <image:title>Chả Bò Mụ Ánh Cố Đô Đặc Biệt</image:title>
+      <image:title>Chả Bò Mụ Ánh Tiêu Sọ Phú Quốc Đòn 500g</image:title>
+      <image:caption>100% thịt bắp bò tươi quết mịn dẻo nóng không pha bột, thơm lừng tiêu sọ</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://nemchahue.github.io/assets/images/tre-hue.jpg</image:loc>
-      <image:title>Tré Huế Mụ Ánh Cung Đình</image:title>
+      <image:title>Tré Huế Mụ Ánh Cung Đình Gia Truyền</image:title>
+      <image:caption>Tré Huế tai mũi heo giòn sần sật trộn thính gạo rang vàng, củ riềng và tỏi ớt</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://nemchahue.github.io/assets/images/combo-qua-bieu.jpg</image:loc>
-      <image:title>Combo Quà Biếu Tứ Quý Mụ Ánh</image:title>
+      <image:title>Hộp Quà Biếu Đặc Sản Huế Tứ Quý Mụ Ánh</image:title>
+      <image:caption>Set quà biếu sang trọng 4 món hút chân không tiện lợi mang lên máy bay</image:caption>
     </image:image>
   </url>
   <url>
     <loc>https://nemchahue.github.io/llms.txt</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-10-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

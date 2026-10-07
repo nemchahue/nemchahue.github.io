@@ -1,7 +1,31 @@
+# ==============================================================================
+# Nem Chả Mụ Ánh (https://nemchahue.github.io/)
+# Robots.txt - Optimized for Google Search, Bing Webmaster & AI Search Engines
+# ==============================================================================
+
 User-agent: *
 Allow: /
+Allow: /assets/
+Allow: /data/store_config.json
+Allow: /llms.txt
+Disallow: /admin/
+Disallow: /api/
+Disallow: /data/orders.json
+Disallow: /.agents/
+Disallow: /.git/
 
-# AI Crawlers & LLM Search Agents
+# Major Search Engines
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# AI Crawlers & Generative Search Engines (LLM Search)
 User-agent: GPTBot
 Allow: /
 
@@ -23,8 +47,9 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
-User-agent: Bingbot
+User-agent: FacebookBot
 Allow: /
 
-# Sitemaps & AI Context
+# Host & Sitemap Directives
+Host: https://nemchahue.github.io
 Sitemap: https://nemchahue.github.io/sitemap.xml

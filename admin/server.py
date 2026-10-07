@@ -65,12 +65,30 @@ def load_env() -> dict[str, str]:
                     env[k.strip()] = v.strip().strip("'\"")
     return env
 
+def get_github_token() -> str:
+    """Retrieve GitHub token from .env or fallback to GitHub CLI hosts.yml."""
+    env = load_env()
+    token = env.get("GITHUB_TOKEN", "").strip()
+    if token and not token.startswith("github_pat_"):
+        return token
+    gh_hosts = Path("/root/.config/gh/hosts.yml")
+    if gh_hosts.exists():
+        try:
+            with open(gh_hosts, "r", encoding="utf-8") as f:
+                for line in f:
+                    if "oauth_token:" in line:
+                        t = line.split("oauth_token:", 1)[1].strip()
+                        if t:
+                            return t
+        except Exception:
+            pass
+    return token
+
 ENV_VARS = load_env()
 ADMIN_PIN = ENV_VARS.get("ADMIN_PIN", "muanh2026")
-GITHUB_TOKEN = ENV_VARS.get("GITHUB_TOKEN", "")
+GITHUB_TOKEN = get_github_token()
 TELEGRAM_BOT_TOKEN = ENV_VARS.get("TELEGRAM_BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = ENV_VARS.get("TELEGRAM_CHAT_ID", "")
-GIT_REMOTE_URL = f"https://x-access-token:{GITHUB_TOKEN}@github.com/nemchahue/nemchahue.github.io.git" if GITHUB_TOKEN else "origin"
 
 # Fallback default configuration
 DEFAULT_CONFIG = {
@@ -299,8 +317,8 @@ def execute_git_publish(commit_msg: str) -> dict:
         subprocess.run(["git", "config", "user.name", "Nem Chả Mụ Ánh Admin"], cwd=PROJECT_ROOT, check=True)
         subprocess.run(["git", "config", "user.email", "admin@nemchahue.github.io"], cwd=PROJECT_ROOT, check=True)
         
-        # Add files
-        subprocess.run(["git", "add", "data/", "app.js", "index.html", "admin/", "assets/"], cwd=PROJECT_ROOT, check=True)
+        # Add files - stage all content and assets
+        subprocess.run(["git", "add", "-A"], cwd=PROJECT_ROOT, check=True)
         
         # Check if there are changes to commit
         status_proc = subprocess.run(["git", "status", "--porcelain"], cwd=PROJECT_ROOT, capture_output=True, text=True)
@@ -312,9 +330,20 @@ def execute_git_publish(commit_msg: str) -> dict:
         else:
             commit_output = "Không có thay đổi mới cần commit. Tiến hành đồng bộ với kho từ xa..."
 
-        # Push to remote
-        remote_target = GIT_REMOTE_URL if GITHUB_TOKEN else "origin"
-        push_proc = subprocess.run(["git", "push", remote_target, "main"], cwd=PROJECT_ROOT, capture_output=True, text=True, timeout=20)
+        # Push to remote using dynamic active token and disable credential helper interference
+        active_token = get_github_token()
+        if active_token:
+            remote_target = f"https://x-access-token:{active_token}@github.com/nemchahue/nemchahue.github.io.git"
+        else:
+            remote_target = "origin"
+
+        push_proc = subprocess.run(
+            ["git", "-c", "credential.helper=", "push", remote_target, "main"],
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
         
         push_success = push_proc.returncode == 0
         push_output = push_proc.stdout + push_proc.stderr
