@@ -1,0 +1,108 @@
+{
+  "store": {
+    "name": "Nem Chả Mụ Ánh",
+    "tagline": "Đặc Sản Cố Đô Huế Gia Truyền - 100% Thịt Tươi Sạch",
+    "address": "25/135 Đặng Văn Ngữ, Phường An Cựu, Thành phố Huế",
+    "phone_display": "0912.515.329",
+    "phone_raw": "0912515329",
+    "zalo_url": "https://zalo.me/0912515329",
+    "website_url": "https://nemchahue.github.io/",
+    "hours": "06:00 - 21:30 hàng ngày (kể cả Lễ, Tết)",
+    "dispatch_email": "shiroedwinda107@gmail.com",
+    "map_link": "https://maps.google.com/?q=25/135+Dang+Van+Ngu+Hue"
+  },
+  "announcement": {
+    "enabled": true,
+    "badge": "🎋 ĐẶC SẢN CỐ ĐÔ",
+    "text": "Nem Chả Mụ Ánh - 100% Thịt Tươi Sạch, Tuyệt Đối Không Hàn The",
+    "subtext": "Giao Hỏa Tốc 24h Toàn Quốc • Ưu Đãi Phí Ship Cho Đơn Từ 300.000đ"
+  },
+  "wholesale_policy": {
+    "discount_range": "10% - 25%",
+    "min_order": "Từ 5kg hoặc 10 xâu",
+    "shipping_method": "Đóng thùng xốp giữ nhiệt + đá khô an toàn 48h, giao hỏa tốc 24h đường bay hoặc xe mát chuyên dụng",
+    "support_notes": "Chuyên cung cấp sỉ cho nhà hàng, quán bún bò Huế, tiệc cưới, đại lý và quà biếu doanh nghiệp toàn quốc."
+  },
+  "banking": {
+    "bank_name": "Vietcombank",
+    "bank_code": "VCB",
+    "account_number": "0123456789",
+    "account_holder": "NEM CHA MU ANH",
+    "transfer_syntax": "NEMCHAMUANH [SĐT Khách]"
+  },
+  "products": [
+    {
+      "id": "nem-chua-mu-anh",
+      "category": "nem",
+      "categoryName": "Nem Chua Cố Đô",
+      "name": "Nem Chua Mụ Ánh Truyền Thống",
+      "price": 75000,
+      "unit": "Xâu 10 cây (gói lá chuối)",
+      "badge": "Bán Chạy Nhất",
+      "image": "assets/images/nem-chua.jpg",
+      "description": "Vị chua thanh tự nhiên, giòn sần sật từ bì và nạc heo tươi mới mổ. Kèm tép tỏi Lý Sơn và ớt xiêm xanh Cố Đô cay nồng.",
+      "active": true
+    },
+    {
+      "id": "cha-bo-mu-anh",
+      "category": "cha",
+      "categoryName": "Chả Đặc Sản",
+      "name": "Chả Bò Mụ Ánh Cố Đô Đặc Biệt",
+      "price": 180000,
+      "unit": "Đòn 500g (Hút chân không)",
+      "badge": "100% Thịt Bò Tươi",
+      "image": "assets/images/cha-bo.jpg",
+      "description": "Thịt bò đùi tươi nóng quết mịn, hòa quyện trọn vẹn vị thơm cay của tiêu sọ Phú Quốc. Đậm đà phong vị hoàng cung.",
+      "active": true
+    },
+    {
+      "id": "cha-lua-mu-anh",
+      "category": "cha",
+      "categoryName": "Chả Đặc Sản",
+      "name": "Chả Lụa Heo Mụ Ánh Quết Tay",
+      "price": 120000,
+      "unit": "Đòn 500g",
+      "badge": "Không Hàn The",
+      "image": "assets/images/hero.jpg",
+      "description": "Chả quết tay từ thịt nạc heo tươi dẻo, ướp nước mắm cốt nhĩ cá cơm thơm lừng. Giòn dai tự nhiên, ngọt vị thịt thật.",
+      "active": true
+    },
+    {
+      "id": "tre-hue-mu-anh",
+      "category": "tre",
+      "categoryName": "Tré Cố Đô",
+      "name": "Tré Huế Mụ Ánh Cung Đình",
+      "price": 95000,
+      "unit": "Hộp 10 cây / Thấu 300g",
+      "badge": "Món Nhắm Số 1",
+      "image": "assets/images/tre-hue.jpg",
+      "description": "Tai mũi heo giòn sần sật trộn thính gạo rang vàng rộm, củ riềng băm và tỏi ớt. Thơm nức mũi, nhắm cùng bia rượu tuyệt hảo.",
+      "active": true
+    },
+    {
+      "id": "combo-mu-anh",
+      "category": "combo",
+      "categoryName": "Hộp Quà Sang Trọng",
+      "name": "Set Quà Biếu Tứ Quý Mụ Ánh",
+      "price": 490000,
+      "unit": "Hộp quà cao cấp 4 món",
+      "badge": "Quà Tặng Thượng Hạng",
+      "image": "assets/images/combo-qua-bieu.jpg",
+      "description": "Hộp quà đỏ nhung son mạ vàng gồm: 10 Nem chua Huế + 1 Đòn Chả bò (500g) + 1 Đòn Chả lụa (500g) + 1 Hộp Tré Huế Mụ Ánh.",
+      "active": true
+    },
+    {
+      "id": "cha-da-mu-anh",
+      "category": "cha",
+      "categoryName": "Chả Đặc Sản",
+      "name": "Chả Da Heo Ớt Xiêm Xanh",
+      "price": 130000,
+      "unit": "Đòn 500g",
+      "badge": "Cay Thơm Độc Đáo",
+      "image": "assets/images/cha-bo.jpg",
+      "description": "Sự kết hợp độc đáo giữa da heo luộc giòn sần sật và ớt xiêm xanh nguyên trái. Vị cay thơm bùng nổ kích thích vị giác.",
+      "active": true
+    }
+  ],
+  "last_updated": "2026-10-07T01:22:00+01:00"
+}

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ord-20261005-001",
+    "customer_name": "Nguyễn Hoàng Nam",
+    "customer_phone": "0983124567",
+    "customer_address": "88 Nguyễn Tri Phương, Phường Phú Nhuận, TP. Huế",
+    "main_product": "Set Quà Biếu Tứ Quý Mụ Ánh",
+    "quantity": 2,
+    "cart_items": "Set Quà Biếu Tứ Quý Mụ Ánh x2 (980.000 đ)",
+    "notes": "Hộp đóng đẹp để đi biếu đối tác, giao lúc 16h chiều nay.",
+    "total_price": 980000,
+    "status": "completed",
+    "source": "Website",
+    "created_at": "2026-10-05T09:30:00+07:00"
+  },
+  {
+    "id": "ord-20261006-002",
+    "customer_name": "Trần Thị Mai Lan",
+    "customer_phone": "0905432198",
+    "customer_address": "Quán Bún Bò O Cúc, 142 Trần Hưng Đạo, Q.1, TP.HCM",
+    "main_product": "📦 Đặt Mua Sỉ / Đại Lý - Chả Cua & Chả Bò",
+    "quantity": 10,
+    "cart_items": "Chả Bò Cố Đô Đặc Biệt x5 đòn (900.000 đ), Chả Lụa Heo x5 đòn (600.000 đ)",
+    "notes": "Đơn sỉ thử nghiệm cho quán bún bò. Gửi bay thùng xốp đá khô.",
+    "total_price": 1500000,
+    "status": "shipping",
+    "source": "Zalo Tư Vấn",
+    "created_at": "2026-10-06T14:15:00+07:00"
+  },
+  {
+    "id": "ord-20261007-003",
+    "customer_name": "Lê Văn Hùng",
+    "customer_phone": "0918765432",
+    "customer_address": "15 Lê Lợi, Phường Vĩnh Ninh, TP. Huế",
+    "main_product": "Nem Chua Mụ Ánh Truyền Thống",
+    "quantity": 4,
+    "cart_items": "Nem Chua Mụ Ánh (x4 xâu - 300.000 đ) | Tré Huế (x2 hộp - 190.000 đ)",
+    "notes": "Lấy tỏi ớt tươi thêm giúp mình nhé.",
+    "total_price": 490000,
+    "status": "new",
+    "source": "Website",
+    "created_at": "2026-10-07T07:45:00+07:00"
+  }
+]

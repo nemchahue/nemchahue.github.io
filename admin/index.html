@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Trị Hệ Thống | Nem Chả Mụ Ánh Cố Đô Huế</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #07130e;
+      --bg-card: #0e2017;
+      --bg-card-hover: #132a1f;
+      --bg-input: #0a1711;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-focus: #f59e0b;
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --primary-light: #34d399;
+      --gold: #f59e0b;
+      --gold-dark: #d97706;
+      --gold-light: #fcd34d;
+      --danger: #ef4444;
+      --info: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+      --shadow-glow: 0 0 20px rgba(245, 158, 11, 0.15);
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    /* Top Navigation Bar */
+    header.top-header {
+      background: rgba(14, 32, 23, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .brand-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand-logo-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+    }
+    .brand-text h1 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ffffff, var(--gold-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-text p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #0b1712;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    }
+    .btn-gold:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-emerald {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+    }
+    .btn-emerald:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border-color);
+      color: var(--text-main);
+    }
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+    }
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    /* Main Container & Layout */
+    .app-layout {
+      display: flex;
+      flex: 1;
+      max-width: 1560px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 24px;
+      gap: 28px;
+    }
+
+    /* Sidebar Navigation */
+    aside.admin-sidebar {
+      width: 250px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .nav-tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: left;
+      width: 100%;
+    }
+    .nav-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+    .nav-tab-btn.active {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: var(--gold-light);
+    }
+    .nav-tab-btn .badge-pill {
+      margin-left: auto;
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--primary-light);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+    }
+
+    /* Content Area */
+    main.content-area {
+      flex: 1;
+      min-width: 0;
+    }
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--primary));
+    }
+    .kpi-title {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .kpi-value {
+      font-family: var(--font-heading);
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Card Panels */
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .panel-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+    }
+
+    /* Form Grids & Inputs */
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .form-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 18px;
+    }
+    .form-group.col-span-2 {
+      grid-column: span 2;
+    }
+    .form-group.col-span-3 {
+      grid-column: span 3;
+    }
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="password"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      color: #ffffff;
+      outline: none;
+      transition: var(--transition);
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+    textarea { resize: vertical; min-height: 80px; }
+
+    /* Product Cards Grid */
+    .product-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .product-admin-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+    }
+    .product-admin-card:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card);
+    }
+    .prod-card-thumb-wrap {
+      height: 160px;
+      position: relative;
+      background: #050d0a;
+      overflow: hidden;
+    }
+    .prod-card-thumb-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .product-admin-card:hover .prod-card-thumb-wrap img {
+      transform: scale(1.05);
+    }
+    .prod-card-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(217, 119, 6, 0.9);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .prod-card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .prod-card-category {
+      font-size: 0.76rem;
+      color: var(--primary-light);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .prod-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .prod-card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 12px;
+      flex: 1;
+    }
+    .prod-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+    }
+    .prod-price-text {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--gold-light);
+    }
+    .prod-unit-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Orders Table */
+    .table-responsive {
+      overflow-x: auto;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    table.data-table th {
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.03);
+      color: #cbd5e1;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    table.data-table td {
+      padding: 14px;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.88rem;
+      vertical-align: middle;
+    }
+    table.data-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .status-badge.new {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--info);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .status-badge.shipping {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--gold-light);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .status-badge.completed {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--primary-light);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-badge.cancelled {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      animation: modalZoom 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .modal-box.modal-lg {
+      max-width: 900px;
+    }
+    @keyframes modalZoom {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Toast Notification */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast {
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      background: rgba(14, 32, 23, 0.95);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-card);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      animation: toastIn 0.3s ease;
+      color: #fff;
+    }
+    .toast.success { border-color: var(--primary); }
+    .toast.error { border-color: var(--danger); }
+    .toast.info { border-color: var(--gold); }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Terminal Output Panel */
+    .terminal-box {
+      background: #040907;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.82rem;
+      color: #a7f3d0;
+      max-height: 240px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* QR Code preview */
+    .qr-preview-box {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px;
+    }
+    .qr-preview-box img {
+      width: 140px;
+      height: 140px;
+      border-radius: 8px;
+      background: #fff;
+      padding: 6px;
+    }
+
+    /* Login Lock Screen */
+    #lockscreen-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #07130e;
+      z-index: 5000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .lock-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      max-width: 420px;
+      width: 100%;
+      padding: 36px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    }
+    .lock-logo {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius: var(--radius-lg);
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      box-shadow: 0 8px 24px rgba(217, 119, 6, 0.4);
+    }
+
+    @media (max-width: 900px) {
+      .app-layout { flex-direction: column; padding: 16px; }
+      aside.admin-sidebar { width: 100%; flex-direction: row; overflow-x: auto; padding-bottom: 8px; }
+      .nav-tab-btn { white-space: nowrap; }
+      .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+      .form-group.col-span-2, .form-group.col-span-3 { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="top-header">
+    <div class="brand-area">
+      <div class="brand-logo-icon">🎋</div>
+      <div class="brand-text">
+        <h1 id="header-brand-title">Nem Chả Mụ Ánh</h1>
+        <p>Bảng Điều Khiển Quản Trị Cố Đô • Port 8090</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="/preview" target="_blank" class="btn btn-outline btn-sm" id="btn-preview-site">
+        👁️ Xem Trang Web Live
+      </a>
+      <button class="btn btn-gold btn-sm" id="btn-quick-save">
+        💾 Lưu Thông Tin
+      </button>
+      <button class="btn btn-emerald btn-sm" id="btn-open-publish">
+        🚀 Xuất Bản GitHub
+      </button>
+      <button class="btn btn-outline btn-sm" id="btn-logout" title="Đăng xuất">
+        🔒 Thoát
+      </button>
+    </div>
+  </header>
+
+  <!-- Main App Layout -->
+  <div class="app-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+      <button class="nav-tab-btn active" data-tab="tab-overview" id="tab-btn-overview">
+        <span>📊</span> Tổng Quan
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-store" id="tab-btn-store">
+        <span>🏬</span> Thông Tin Cơ Sở
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-products" id="tab-btn-products">
+        <span>🥩</span> Bảng Giá & Món Ăn
+        <span class="badge-pill" id="badge-prod-count">6</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-promo" id="tab-btn-promo">
+        <span>📢</span> Biểu Ngữ & Bán Sỉ
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-banking" id="tab-btn-banking">
+        <span>💳</span> Thanh Toán & VietQR
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-orders" id="tab-btn-orders">
+        <span>📋</span> Đơn Hàng & Khách
+        <span class="badge-pill" id="badge-orders-count">3</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="tab-publish" id="tab-btn-publish">
+        <span>🚀</span> Xuất Bản & Git
+      </button>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content-area">
+
+      <!-- TAB 1: OVERVIEW -->
+      <section class="tab-content active" id="tab-overview">
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-title">Tổng Sản Phẩm Đang Bán</span>
+            <span class="kpi-value" id="kpi-total-prods">6</span>
+            <span class="kpi-sub">Đặc sản Nem, Chả bò, Tré, Set quà</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Đơn Tiếp Nhận Gần Đây</span>
+            <span class="kpi-value" id="kpi-orders-count">3</span>
+            <span class="kpi-sub" id="kpi-new-orders-sub">1 đơn mới cần gọi xác nhận</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Doanh Thu Đơn Ước Tính</span>
+            <span class="kpi-value" id="kpi-total-rev">2.970.000 đ</span>
+            <span class="kpi-sub">Đơn hàng lẻ & sỉ qua kênh online</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-title">Trạng Thái Kho & Máy Chủ</span>
+            <span class="kpi-value" style="color: var(--primary-light);">HOẠT ĐỘNG</span>
+            <span class="kpi-sub" id="kpi-system-status">Cổng 8090 • Uptime sẵn sàng</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">⚡ Thao Tác Nhanh Quản Trị</h2>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+            <button class="btn btn-gold" onclick="switchTab('tab-products')">
+              ➕ Điều Chỉnh Giá & Món Ăn
+            </button>
+            <button class="btn btn-outline" onclick="switchTab('tab-store')">
+              📞 Đổi Hotline / Zalo / Địa Chỉ
+            </button>
+            <button class="btn btn-outline" onclick="switchTab('tab-orders')">
+              📝 Nhập Đơn Hàng Mới Tại Lò
+            </button>
+            <button class="btn btn-outline" id="btn-test-telegram-overview">
+              📱 Gửi Tin Nhắn Thử Qua Telegram
+            </button>
+            <button class="btn btn-emerald" onclick="switchTab('tab-publish')">
+              🚀 Đồng Bộ & Đẩy Lên GitHub Pages
+            </button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">📋 Đơn Đặt Hàng Mới Nhất</h2>
+            <button class="btn btn-outline btn-sm" onclick="switchTab('tab-orders')">Xem Tất Cả ➔</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="recent-orders-table">
+              <thead>
+                <tr>
+                  <th>Mã Đơn</th>
+                  <th>Khách Hàng</th>
+                  <th>Số Điện Thoại</th>
+                  <th>Món Đặt</th>
+                  <th>Tổng Tiền</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody id="recent-orders-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: STORE INFO -->
+      <section class="tab-content" id="tab-store">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">🏬 Thông Tin Thương Hiệu & Cơ Sở Huế</h2>
+            <button class="btn btn-gold btn-sm" onclick="saveStoreConfig()">Lưu Thay Đổi</button>
+          </div>
+          <form id="form-store-info" onsubmit="event.preventDefault(); saveStoreConfig();">
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label for="store-name">Tên Cơ Sở / Thương Hiệu *</label>
+                <input type="text" id="store-name" required placeholder="Nem Chả Mụ Ánh">
+              </div>
+              <div class="form-group">
+                <label for="store-tagline">Tiêu Đề Phụ / Khẩu Hiệu (Slogan)</label>
+                <input type="text" id="store-tagline" placeholder="Đặc Sản Cố Đô Huế Gia Truyền - 100% Thịt Tươi Sạch">
+              </div>
+              <div class="form-group col-span-2">
+                <label for="store-address">Địa Chỉ Lò Sản Xuất & Điểm Bán Chính Tại Huế *</label>
+                <input type="text" id="store-address" required placeholder="25/135 Đặng Văn Ngữ, Phường An Cựu, Thành phố Huế">
+              </div>
+              <div class="form-group">
+                <label for="store-phone-display">Hotline Hiển Thị (Định dạng đẹp)</label>
+                <input type="text" id="store-phone-display" placeholder="0912.515.329">
+              </div>
+              <div class="form-group">
+                <label for="store-phone-raw">Hotline Quay Số (Chỉ số)</label>
+                <input type="tel" id="store-phone-raw" placeholder="0912515329">
+              </div>
+              <div class="form-group">
+                <label for="store-zalo-url">Đường Dẫn Zalo Tư Vấn Trực Tiếp</label>
+                <input type="text" id="store-zalo-url" placeholder="https://zalo.me/0912515329">
+              </div>
+              <div class="form-group">
+                <label for="store-hours">Thời Gian Phục Vụ Hàng Ngày</label>
+                <input type="text" id="store-hours" placeholder="06:00 - 21:30 hàng ngày (kể cả Lễ, Tết)">
+              </div>
+              <div class="form-group col-span-2">
+                <label for="store-dispatch-email">Email Nhận Đơn Hàng (FormSubmit AJAX)</label>
+                <input type="text" id="store-dispatch-email" placeholder="shiroedwinda107@gmail.com">
+              </div>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 3: PRODUCTS & CATALOG -->
+      <section class="tab-content" id="tab-products">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">🥩 Danh Sách Món Đặc Sản & Bảng Giá</h2>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-gold btn-sm" id="btn-add-product" onclick="openProductModal()">
+                + Thêm Món Mới
+              </button>
+              <button class="btn btn-emerald btn-sm" onclick="saveStoreConfig()">
+                💾 Lưu Bảng Giá
+              </button>
+            </div>
+          </div>
+          <div class="product-cards-grid" id="admin-products-grid">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: BANNERS & WHOLESALE POLICY -->
+      <section class="tab-content" id="tab-promo">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">📢 Biểu Ngữ Thông Báo Đầu Trang</h2>
+            <button class="btn btn-gold btn-sm" onclick="saveStoreConfig()">Lưu Thay Đổi</button>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="promo-enabled">Hiển Thị Thanh Thông Báo</label>
+              <select id="promo-enabled">
+                <option value="true">BẬT (Hiển thị đầu trang web)</option>
+                <option value="false">TẮT (Ẩn thông báo)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="promo-badge">Huy Hiệu Nổi Bật</label>
+              <input type="text" id="promo-badge" placeholder="🎋 ĐẶC SẢN CỐ ĐÔ">
+            </div>
+            <div class="form-group col-span-2">
+              <label for="promo-text">Dòng Thông Báo Chính</label>
+              <input type="text" id="promo-text" placeholder="Nem Chả Mụ Ánh - 100% Thịt Tươi Sạch, Tuyệt Đối Không Hàn The">
+            </div>
+            <div class="form-group col-span-2">
+              <label for="promo-subtext">Dòng Thông Báo Phụ / Ưu Đãi Giao Hàng</label>
+              <input type="text" id="promo-subtext" placeholder="Giao Hỏa Tốc 24h Toàn Quốc • Ưu Đãi Phí Ship Cho Đơn Từ 300.000đ">
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">🤝 Chính Sách Cung Cấp Sỉ & Đại Lý</h2>
+            <button class="btn btn-gold btn-sm" onclick="saveStoreConfig()">Lưu Thay Đổi</button>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="ws-discount">Mức Chiết Khấu Sỉ Ưu Đãi</label>
+              <input type="text" id="ws-discount" placeholder="10% - 25%">
+            </div>
+            <div class="form-group">
+              <label for="ws-min-order">Số Lượng Đặt Sỉ Tối Thiểu</label>
+              <input type="text" id="ws-min-order" placeholder="Từ 5kg hoặc 10 xâu">
+            </div>
+            <div class="form-group col-span-2">
+              <label for="ws-shipping">Phương Thức Bảo Quản & Vận Chuyển</label>
+              <input type="text" id="ws-shipping" placeholder="Đóng thùng xốp giữ nhiệt + đá khô an toàn 48h, giao hỏa tốc 24h đường bay hoặc xe mát chuyên dụng">
+            </div>
+            <div class="form-group col-span-2">
+              <label for="ws-notes">Mô Tả Khách Hàng Mục Tiêu & Cam Kết</label>
+              <textarea id="ws-notes" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: BANKING & VIETQR -->
+      <section class="tab-content" id="tab-banking">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">💳 Thông Tin Tài Khoản Ngân Hàng & VietQR</h2>
+            <button class="btn btn-gold btn-sm" onclick="saveStoreConfig()">Lưu Thay Đổi</button>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="bank-name">Tên Ngân Hàng</label>
+              <input type="text" id="bank-name" placeholder="Vietcombank" oninput="updateVietQRPreview()">
+            </div>
+            <div class="form-group">
+              <label for="bank-code">Mã Ngân Hàng (VCB, MB, TCB, ACB...)</label>
+              <input type="text" id="bank-code" placeholder="VCB" oninput="updateVietQRPreview()">
+            </div>
+            <div class="form-group">
+              <label for="bank-acc-num">Số Tài Khoản</label>
+              <input type="text" id="bank-acc-num" placeholder="0123456789" oninput="updateVietQRPreview()">
+            </div>
+            <div class="form-group">
+              <label for="bank-acc-holder">Tên Chủ Tài Khoản (Không dấu in hoa)</label>
+              <input type="text" id="bank-acc-holder" placeholder="NEM CHA MU ANH" oninput="updateVietQRPreview()">
+            </div>
+            <div class="form-group col-span-2">
+              <label for="bank-syntax">Cú Pháp Chuyển Khoản Mẫu</label>
+              <input type="text" id="bank-syntax" placeholder="NEMCHAMUANH [SĐT Khách]">
+            </div>
+          </div>
+
+          <div style="margin-top: 16px;">
+            <label style="display: block; margin-bottom: 8px;">Xem Trước Mã VietQR Tự Động:</label>
+            <div class="qr-preview-box">
+              <img id="vietqr-img" src="https://img.vietqr.io/image/VCB-0123456789-compact.png?amount=0&addInfo=NEMCHAMUANH" alt="VietQR">
+              <div>
+                <strong style="color: #fff; font-size: 1rem;" id="qr-bank-label">Vietcombank - 0123456789</strong>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 4px 0;" id="qr-holder-label">Chủ TK: NEM CHA MU ANH</p>
+                <p style="color: var(--primary-light); font-size: 0.8rem;">✓ Tự động tích hợp chuẩn NAPAS 24/7 quét nhanh trên mọi app ngân hàng</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: ORDERS CRM -->
+      <section class="tab-content" id="tab-orders">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">📋 Quản Lý Đơn Đặt Hàng & Khách Hàng</h2>
+            <div style="display: flex; gap: 10px;">
+              <button class="btn btn-gold btn-sm" onclick="openAddOrderModal()">
+                + Nhập Đơn Tại Lò / Điện Thoại
+              </button>
+              <button class="btn btn-outline btn-sm" onclick="exportOrdersCSV()">
+                📥 Xuất File Excel / CSV
+              </button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-bottom: 18px; flex-wrap: wrap;">
+            <select id="filter-order-status" style="max-width: 200px;" onchange="renderOrdersTable()">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="new">Mới tiếp nhận</option>
+              <option value="shipping">Đang giao hàng</option>
+              <option value="completed">Đã hoàn tất</option>
+              <option value="cancelled">Đã hủy</option>
+            </select>
+            <input type="text" id="search-orders" placeholder="Tìm theo tên hoặc số điện thoại..." style="max-width: 300px;" oninput="renderOrdersTable()">
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table" id="orders-full-table">
+              <thead>
+                <tr>
+                  <th>Mã Đơn / Thời Gian</th>
+                  <th>Khách Hàng & Địa Chỉ</th>
+                  <th>Số Điện Thoại</th>
+                  <th>Chi Tiết Món Đặt</th>
+                  <th>Tổng Tiền</th>
+                  <th>Trạng Thái</th>
+                  <th>Hành Động</th>
+                </tr>
+              </thead>
+              <tbody id="orders-full-tbody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 7: PUBLISH & GIT SYNC -->
+      <section class="tab-content" id="tab-publish">
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">🚀 Xuất Bản Trực Tiếp Lên GitHub Pages</h2>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+            Khi bạn thay đổi giá hoặc thông tin, nhấn nút bên dưới để hệ thống tự động lưu bản cam kết (git commit) 
+            và đẩy mã nguồn lên GitHub Pages repository <code>https://nemchahue.github.io/</code> ngay tức thì!
+          </p>
+
+          <div class="form-group">
+            <label for="publish-commit-msg">Ghi Chú Đợt Cập Nhật (Tùy chọn)</label>
+            <input type="text" id="publish-commit-msg" placeholder="Ví dụ: Cập nhật giá nem chua và hotline mùa Tết">
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+            <button class="btn btn-emerald" id="btn-do-publish" onclick="executePublish()">
+              🚀 Xuất Bản Lên Website Ngay Bây Giờ
+            </button>
+            <button class="btn btn-outline" id="btn-test-telegram-publish" onclick="testTelegram()">
+              📱 Thử Gửi Báo Cáo Qua Telegram
+            </button>
+            <a href="https://nemchahue.github.io/" target="_blank" rel="noopener" class="btn btn-outline">
+              🌐 Mở Trang Web Trực Tiếp
+            </a>
+          </div>
+
+          <div style="margin-top: 18px;">
+            <label style="display: block; margin-bottom: 8px;">Nhật Ký Đồng Bộ (Git Output Log):</label>
+            <div class="terminal-box" id="git-terminal-output">Chưa thực hiện xuất bản trong phiên này. Sẵn sàng...</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- MODAL: ADD / EDIT PRODUCT -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="panel-title" id="product-modal-title">Chỉnh Sửa Sản Phẩm</h3>
+        <button class="modal-close-btn" onclick="closeProductModal()">&times;</button>
+      </div>
+      <form id="product-modal-form" onsubmit="event.preventDefault(); handleSaveProduct();">
+        <input type="hidden" id="modal-prod-id">
+        <div class="form-group">
+          <label for="modal-prod-name">Tên Sản Phẩm *</label>
+          <input type="text" id="modal-prod-name" required placeholder="Nem Chua Mụ Ánh Truyền Thống">
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="modal-prod-category">Phân Loại Mã</label>
+            <select id="modal-prod-category" onchange="syncCategoryName()">
+              <option value="nem">nem (Nem Chua Cố Đô)</option>
+              <option value="cha">cha (Chả Đặc Sản)</option>
+              <option value="tre">tre (Tré Cố Đô)</option>
+              <option value="combo">combo (Hộp Quà Sang Trọng)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="modal-prod-categoryName">Tên Hiển Thị Phân Loại</label>
+            <input type="text" id="modal-prod-categoryName" placeholder="Nem Chua Cố Đô">
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="modal-prod-price">Giá Bán (VNĐ) *</label>
+            <input type="number" id="modal-prod-price" required min="1000" step="1000" placeholder="75000" oninput="formatModalPriceHint()">
+            <span style="font-size: 0.78rem; color: var(--gold-light);" id="modal-price-hint">75.000 đ</span>
+          </div>
+          <div class="form-group">
+            <label for="modal-prod-unit">Quy Cách / Đơn Vị Tính *</label>
+            <input type="text" id="modal-prod-unit" required placeholder="Xâu 10 cây (gói lá chuối)">
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="modal-prod-badge">Huy Hiệu (Badge)</label>
+            <input type="text" id="modal-prod-badge" placeholder="Bán Chạy Nhất">
+          </div>
+          <div class="form-group">
+            <label for="modal-prod-image">Đường Dẫn Hình Ảnh</label>
+            <input type="text" id="modal-prod-image" placeholder="assets/images/nem-chua.jpg">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modal-prod-desc">Mô Tả Sản Phẩm</label>
+          <textarea id="modal-prod-desc" rows="3" placeholder="Mô tả hương vị, nguyên liệu, cách thưởng thức..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-outline" onclick="closeProductModal()">Hủy</button>
+          <button type="submit" class="btn btn-gold">Lưu Sản Phẩm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD MANUAL ORDER -->
+  <div class="modal-overlay" id="order-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="panel-title">Nhập Đơn Hàng Mới Tại Lò / Điện Thoại</h3>
+        <button class="modal-close-btn" onclick="closeOrderModal()">&times;</button>
+      </div>
+      <form id="order-modal-form" onsubmit="event.preventDefault(); handleSaveNewOrder();">
+        <div class="form-group">
+          <label for="modal-ord-name">Họ Tên Khách Hàng *</label>
+          <input type="text" id="modal-ord-name" required placeholder="Ví dụ: Chị Lan O Cúc">
+        </div>
+        <div class="form-group">
+          <label for="modal-ord-phone">Số Điện Thoại Nhận Hàng *</label>
+          <input type="tel" id="modal-ord-phone" required placeholder="0905123456">
+        </div>
+        <div class="form-group">
+          <label for="modal-ord-address">Địa Chỉ Nhận Hàng *</label>
+          <input type="text" id="modal-ord-address" required placeholder="12 Nguyễn Huệ, TP. Huế">
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="modal-ord-product">Món Đặt Chính</label>
+            <input type="text" id="modal-ord-product" required placeholder="Chả Bò Cố Đô Đặc Biệt">
+          </div>
+          <div class="form-group">
+            <label for="modal-ord-qty">Số Lượng</label>
+            <input type="number" id="modal-ord-qty" value="1" min="1">
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="modal-ord-total">Tổng Tiền (VNĐ)</label>
+            <input type="number" id="modal-ord-total" value="180000" min="0" step="1000">
+          </div>
+          <div class="form-group">
+            <label for="modal-ord-source">Nguồn Đơn</label>
+            <select id="modal-ord-source">
+              <option value="Điện Thoại Trực Tiếp">Điện Thoại Trực Tiếp</option>
+              <option value="Zalo Tư Vấn">Zalo Tư Vấn</option>
+              <option value="Khách Ghé Lò (Trực tiếp)">Khách Ghé Lò (Trực tiếp)</option>
+              <option value="Đại Lý Đặt Sỉ">Đại Lý Đặt Sỉ</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="modal-ord-notes">Ghi Chú Đơn Hàng</label>
+          <textarea id="modal-ord-notes" rows="2" placeholder="Giao trước 17h, kèm đá khô..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-outline" onclick="closeOrderModal()">Hủy</button>
+          <button type="submit" class="btn btn-emerald">Lưu & Tiếp Nhận Đơn</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- LOCK SCREEN / AUTH PIN -->
+  <div id="lockscreen-modal" style="display: none;">
+    <div class="lock-box">
+      <div class="lock-logo">🎋</div>
+      <h2 style="font-family: var(--font-heading); margin-bottom: 6px; color: #fff;">Nem Chả Mụ Ánh</h2>
+      <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px;">Đăng nhập quyền quản trị hệ thống</p>
+      <form onsubmit="event.preventDefault(); handleLogin();">
+        <div class="form-group" style="text-align: left;">
+          <label for="login-pin">Mã PIN Quản Trị:</label>
+          <input type="password" id="login-pin" required placeholder="Nhập mã PIN quản trị..." autocomplete="current-password" style="font-size: 1.1rem; text-align: center; letter-spacing: 2px;">
+        </div>
+        <button type="submit" class="btn btn-gold btn-block" style="width: 100%; margin-top: 12px;" id="btn-login-submit">
+          Đăng Nhập Quản Trị ➔
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <script>
+    // State
+    let storeConfig = null;
+    let ordersData = [];
+    let authToken = localStorage.getItem('muanh_admin_token') || '';
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      const icon = type === 'success' ? '✓' : (type === 'error' ? '✕' : 'ℹ');
+      toast.innerHTML = `<span style="font-weight:700;">${icon}</span> <span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function formatVND(num) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(num);
+    }
+
+    // Switch Tabs
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(el => el.classList.remove('active'));
+      
+      const targetContent = document.getElementById(tabId);
+      if (targetContent) targetContent.classList.add('active');
+
+      const targetBtn = document.querySelector(`.nav-tab-btn[data-tab="${tabId}"]`);
+      if (targetBtn) targetBtn.classList.add('active');
+    }
+
+    document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // Check Auth & Init
+    async function initAdmin() {
+      try {
+        const statusRes = await fetch('/api/status', {
+          headers: authToken ? { 'Authorization': `Bearer ${authToken}` } : {}
+        });
+        const status = await statusRes.json();
+        if (!status.authenticated && !document.cookie.includes('muanh_admin_session')) {
+          document.getElementById('lockscreen-modal').style.display = 'flex';
+          return;
+        }
+        document.getElementById('lockscreen-modal').style.display = 'none';
+        await loadConfig();
+        await loadOrders();
+      } catch (err) {
+        console.error('Init error:', err);
+        showToast('Không thể kết nối máy chủ quản trị', 'error');
+      }
+    }
+
+    async function handleLogin() {
+      const pin = document.getElementById('login-pin').value.trim();
+      if (!pin) return;
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pin })
+        });
+        const data = await res.json();
+        if (data.success && data.token) {
+          authToken = data.token;
+          localStorage.setItem('muanh_admin_token', authToken);
+          document.getElementById('lockscreen-modal').style.display = 'none';
+          showToast('Đăng nhập thành công!', 'success');
+          await loadConfig();
+          await loadOrders();
+        } else {
+          showToast(data.error || 'Mã PIN sai!', 'error');
+        }
+      } catch (err) {
+        showToast('Lỗi mạng khi đăng nhập', 'error');
+      }
+    }
+
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      try {
+        await fetch('/api/logout', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+      } catch (e) {}
+      localStorage.removeItem('muanh_admin_token');
+      authToken = '';
+      location.reload();
+    });
+
+    // Load Configuration
+    async function loadConfig() {
+      try {
+        const res = await fetch('/api/config');
+        storeConfig = await res.json();
+        renderStoreForm();
+        renderProductsAdmin();
+        renderPromoForm();
+        renderBankingForm();
+      } catch (err) {
+        showToast('Lỗi tải cấu hình cơ sở', 'error');
+      }
+    }
+
+    function renderStoreForm() {
+      if (!storeConfig || !storeConfig.store) return;
+      const s = storeConfig.store;
+      document.getElementById('store-name').value = s.name || '';
+      document.getElementById('header-brand-title').innerText = s.name || 'Nem Chả Mụ Ánh';
+      document.getElementById('store-tagline').value = s.tagline || '';
+      document.getElementById('store-address').value = s.address || '';
+      document.getElementById('store-phone-display').value = s.phone_display || '';
+      document.getElementById('store-phone-raw').value = s.phone_raw || '';
+      document.getElementById('store-zalo-url').value = s.zalo_url || '';
+      document.getElementById('store-hours').value = s.hours || '';
+      document.getElementById('store-dispatch-email').value = s.dispatch_email || '';
+    }
+
+    function renderPromoForm() {
+      if (!storeConfig) return;
+      if (storeConfig.announcement) {
+        const a = storeConfig.announcement;
+        document.getElementById('promo-enabled').value = String(Boolean(a.enabled));
+        document.getElementById('promo-badge').value = a.badge || '';
+        document.getElementById('promo-text').value = a.text || '';
+        document.getElementById('promo-subtext').value = a.subtext || '';
+      }
+      if (storeConfig.wholesale_policy) {
+        const w = storeConfig.wholesale_policy;
+        document.getElementById('ws-discount').value = w.discount_range || '';
+        document.getElementById('ws-min-order').value = w.min_order || '';
+        document.getElementById('ws-shipping').value = w.shipping_method || '';
+        document.getElementById('ws-notes').value = w.support_notes || '';
+      }
+    }
+
+    function renderBankingForm() {
+      if (!storeConfig || !storeConfig.banking) return;
+      const b = storeConfig.banking;
+      document.getElementById('bank-name').value = b.bank_name || '';
+      document.getElementById('bank-code').value = b.bank_code || '';
+      document.getElementById('bank-acc-num').value = b.account_number || '';
+      document.getElementById('bank-acc-holder').value = b.account_holder || '';
+      document.getElementById('bank-syntax').value = b.transfer_syntax || '';
+      updateVietQRPreview();
+    }
+
+    function updateVietQRPreview() {
+      const code = document.getElementById('bank-code')?.value.trim() || 'VCB';
+      const num = document.getElementById('bank-acc-num')?.value.trim() || '0123456789';
+      const holder = document.getElementById('bank-acc-holder')?.value.trim() || 'NEM CHA MU ANH';
+      const name = document.getElementById('bank-name')?.value.trim() || 'Vietcombank';
+
+      const img = document.getElementById('vietqr-img');
+      if (img) {
+        img.src = `https://img.vietqr.io/image/${code}-${num}-compact.png?amount=0&addInfo=NEMCHAMUANH`;
+      }
+      const label = document.getElementById('qr-bank-label');
+      if (label) label.innerText = `${name} - ${num}`;
+      const hlabel = document.getElementById('qr-holder-label');
+      if (hlabel) hlabel.innerText = `Chủ TK: ${holder}`;
+    }
+
+    function renderProductsAdmin() {
+      if (!storeConfig || !Array.isArray(storeConfig.products)) return;
+      const grid = document.getElementById('admin-products-grid');
+      const countPill = document.getElementById('badge-prod-count');
+      const kpiProds = document.getElementById('kpi-total-prods');
+
+      const activeProds = storeConfig.products.filter(p => p.active !== false);
+      if (countPill) countPill.innerText = activeProds.length;
+      if (kpiProds) kpiProds.innerText = activeProds.length;
+
+      grid.innerHTML = storeConfig.products.map((prod, idx) => `
+        <article class="product-admin-card" data-id="${prod.id}">
+          <div class="prod-card-thumb-wrap">
+            <img src="${prod.image}" alt="${prod.name}" onerror="this.src='assets/images/hero.jpg'">
+            ${prod.badge ? `<span class="prod-card-badge">${prod.badge}</span>` : ''}
+          </div>
+          <div class="prod-card-body">
+            <span class="prod-card-category">${prod.categoryName || prod.category}</span>
+            <h3 class="prod-card-title">${prod.name}</h3>
+            <p class="prod-card-desc">${prod.description || ''}</p>
+            <div class="prod-card-footer">
+              <div>
+                <div class="prod-price-text">${formatVND(prod.price)}</div>
+                <div class="prod-unit-text">${prod.unit}</div>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn btn-outline btn-sm" onclick="openProductModal('${prod.id}')">Sửa</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteProduct('${prod.id}')">Xóa</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Save Store Config
+    async function saveStoreConfig() {
+      if (!storeConfig) return;
+
+      // Extract Store Info
+      storeConfig.store = {
+        ...storeConfig.store,
+        name: document.getElementById('store-name').value.trim(),
+        tagline: document.getElementById('store-tagline').value.trim(),
+        address: document.getElementById('store-address').value.trim(),
+        phone_display: document.getElementById('store-phone-display').value.trim(),
+        phone_raw: document.getElementById('store-phone-raw').value.trim(),
+        zalo_url: document.getElementById('store-zalo-url').value.trim(),
+        hours: document.getElementById('store-hours').value.trim(),
+        dispatch_email: document.getElementById('store-dispatch-email').value.trim()
+      };
+
+      // Extract Announcement
+      storeConfig.announcement = {
+        enabled: document.getElementById('promo-enabled').value === 'true',
+        badge: document.getElementById('promo-badge').value.trim(),
+        text: document.getElementById('promo-text').value.trim(),
+        subtext: document.getElementById('promo-subtext').value.trim()
+      };
+
+      // Extract Wholesale Policy
+      storeConfig.wholesale_policy = {
+        discount_range: document.getElementById('ws-discount').value.trim(),
+        min_order: document.getElementById('ws-min-order').value.trim(),
+        shipping_method: document.getElementById('ws-shipping').value.trim(),
+        support_notes: document.getElementById('ws-notes').value.trim()
+      };
+
+      // Extract Banking
+      storeConfig.banking = {
+        bank_name: document.getElementById('bank-name').value.trim(),
+        bank_code: document.getElementById('bank-code').value.trim(),
+        account_number: document.getElementById('bank-acc-num').value.trim(),
+        account_holder: document.getElementById('bank-acc-holder').value.trim(),
+        transfer_syntax: document.getElementById('bank-syntax').value.trim()
+      };
+
+      try {
+        const res = await fetch('/api/config', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify(storeConfig)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Đã lưu thông tin cơ sở và đồng bộ thành công!', 'success');
+          document.getElementById('header-brand-title').innerText = storeConfig.store.name;
+        } else {
+          showToast(data.error || 'Lỗi lưu thông tin', 'error');
+        }
+      } catch (err) {
+        showToast('Lỗi mạng khi lưu cấu hình', 'error');
+      }
+    }
+
+    document.getElementById('btn-quick-save').addEventListener('click', saveStoreConfig);
+
+    // Product Modal Actions
+    function openProductModal(prodId = null) {
+      const modal = document.getElementById('product-modal');
+      const title = document.getElementById('product-modal-title');
+      const form = document.getElementById('product-modal-form');
+      form.reset();
+
+      if (prodId && storeConfig && storeConfig.products) {
+        const prod = storeConfig.products.find(p => p.id === prodId);
+        if (prod) {
+          title.innerText = 'Chỉnh Sửa Món Ăn: ' + prod.name;
+          document.getElementById('modal-prod-id').value = prod.id;
+          document.getElementById('modal-prod-name').value = prod.name;
+          document.getElementById('modal-prod-category').value = prod.category;
+          document.getElementById('modal-prod-categoryName').value = prod.categoryName || '';
+          document.getElementById('modal-prod-price').value = prod.price;
+          document.getElementById('modal-prod-unit').value = prod.unit;
+          document.getElementById('modal-prod-badge').value = prod.badge || '';
+          document.getElementById('modal-prod-image').value = prod.image || '';
+          document.getElementById('modal-prod-desc').value = prod.description || '';
+          formatModalPriceHint();
+        }
+      } else {
+        title.innerText = 'Thêm Món Ăn Đặc Sản Mới';
+        document.getElementById('modal-prod-id').value = '';
+        document.getElementById('modal-prod-category').value = 'cha';
+        document.getElementById('modal-prod-categoryName').value = 'Chả Đặc Sản';
+        document.getElementById('modal-prod-price').value = 100000;
+        document.getElementById('modal-prod-unit').value = 'Đòn 500g';
+        document.getElementById('modal-prod-image').value = 'assets/images/cha-bo.jpg';
+        formatModalPriceHint();
+      }
+
+      modal.classList.add('active');
+    }
+
+    function closeProductModal() {
+      document.getElementById('product-modal').classList.remove('active');
+    }
+
+    function formatModalPriceHint() {
+      const val = parseInt(document.getElementById('modal-prod-price').value) || 0;
+      document.getElementById('modal-price-hint').innerText = formatVND(val);
+    }
+
+    function syncCategoryName() {
+      const cat = document.getElementById('modal-prod-category').value;
+      const catMap = {
+        nem: 'Nem Chua Cố Đô',
+        cha: 'Chả Đặc Sản',
+        tre: 'Tré Cố Đô',
+        combo: 'Hộp Quà Sang Trọng'
+      };
+      document.getElementById('modal-prod-categoryName').value = catMap[cat] || 'Đặc Sản Huế';
+    }
+
+    async function handleSaveProduct() {
+      const prodId = document.getElementById('modal-prod-id').value;
+      const name = document.getElementById('modal-prod-name').value.trim();
+      const category = document.getElementById('modal-prod-category').value;
+      const categoryName = document.getElementById('modal-prod-categoryName').value.trim();
+      const price = parseInt(document.getElementById('modal-prod-price').value) || 0;
+      const unit = document.getElementById('modal-prod-unit').value.trim();
+      const badge = document.getElementById('modal-prod-badge').value.trim();
+      const image = document.getElementById('modal-prod-image').value.trim();
+      const description = document.getElementById('modal-prod-desc').value.trim();
+
+      if (!name || price <= 0 || !unit) {
+        showToast('Vui lòng nhập đầy đủ tên, giá và đơn vị', 'error');
+        return;
+      }
+
+      if (!storeConfig.products) storeConfig.products = [];
+
+      if (prodId) {
+        // Edit existing
+        const idx = storeConfig.products.findIndex(p => p.id === prodId);
+        if (idx !== -1) {
+          storeConfig.products[idx] = {
+            ...storeConfig.products[idx],
+            name, category, categoryName, price, unit, badge, image, description
+          };
+        }
+      } else {
+        // Add new
+        const newId = 'prod-' + Date.now();
+        storeConfig.products.push({
+          id: newId,
+          name, category, categoryName, price, unit, badge, image, description,
+          active: true
+        });
+      }
+
+      closeProductModal();
+      renderProductsAdmin();
+      await saveStoreConfig();
+      showToast('Đã cập nhật sản phẩm thành công!', 'success');
+    }
+
+    async function deleteProduct(prodId) {
+      if (!confirm('Bạn có chắc chắn muốn xóa món này khỏi bảng giá?')) return;
+      storeConfig.products = storeConfig.products.filter(p => p.id !== prodId);
+      renderProductsAdmin();
+      await saveStoreConfig();
+      showToast('Đã xóa món ăn khỏi bảng giá', 'info');
+    }
+
+    // Orders CRM Management
+    async function loadOrders() {
+      try {
+        const res = await fetch('/api/orders', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.orders) {
+          ordersData = data.orders;
+          renderOrdersTable();
+          renderRecentOrdersOverview();
+
+          if (data.stats) {
+            document.getElementById('kpi-orders-count').innerText = data.stats.total_orders;
+            document.getElementById('kpi-total-rev').innerText = formatVND(data.stats.total_revenue);
+            document.getElementById('kpi-new-orders-sub').innerText = `${data.stats.new_orders} đơn mới cần gọi xác nhận`;
+            document.getElementById('badge-orders-count').innerText = data.stats.new_orders;
+          }
+        }
+      } catch (err) {
+        console.warn('Orders fetch error:', err);
+      }
+    }
+
+    function renderRecentOrdersOverview() {
+      const tbody = document.getElementById('recent-orders-tbody');
+      if (!tbody) return;
+      const recent = ordersData.slice(0, 5);
+      if (recent.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:20px;">Chưa có đơn hàng nào</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = recent.map(o => `
+        <tr>
+          <td><code>${o.id}</code></td>
+          <td><strong>${o.customer_name}</strong></td>
+          <td><a href="tel:${o.customer_phone}" style="color:var(--gold-light); text-decoration:none;">${o.customer_phone}</a></td>
+          <td>${o.main_product}</td>
+          <td><strong>${formatVND(o.total_price || 0)}</strong></td>
+          <td><span class="status-badge ${o.status}">${getStatusLabel(o.status)}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderOrdersTable() {
+      const tbody = document.getElementById('orders-full-tbody');
+      if (!tbody) return;
+
+      const statusFilter = document.getElementById('filter-order-status')?.value || 'all';
+      const search = (document.getElementById('search-orders')?.value || '').toLowerCase().trim();
+
+      let filtered = ordersData;
+      if (statusFilter !== 'all') {
+        filtered = filtered.filter(o => o.status === statusFilter);
+      }
+      if (search) {
+        filtered = filtered.filter(o => 
+          (o.customer_name || '').toLowerCase().includes(search) || 
+          (o.customer_phone || '').includes(search) ||
+          (o.customer_address || '').toLowerCase().includes(search)
+        );
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:24px;">Không tìm thấy đơn hàng phù hợp</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(o => `
+        <tr>
+          <td>
+            <code>${o.id}</code>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+              ${new Date(o.created_at).toLocaleString('vi-VN')}
+            </div>
+          </td>
+          <td>
+            <strong>${o.customer_name}</strong>
+            <div style="font-size:0.78rem; color:var(--text-muted);">${o.customer_address}</div>
+          </td>
+          <td>
+            <a href="tel:${o.customer_phone}" style="color:var(--gold-light); font-weight:700; text-decoration:none;">${o.customer_phone}</a>
+            <div style="margin-top:4px;">
+              <a href="https://zalo.me/${o.customer_phone.replace(/[^0-9]/g, '')}" target="_blank" rel="noopener" class="btn btn-outline btn-sm" style="padding:2px 6px; font-size:0.72rem;">Nhắn Zalo</a>
+            </div>
+          </td>
+          <td>
+            <div><strong>${o.main_product}</strong> (SL: ${o.quantity || 1})</div>
+            ${o.cart_items ? `<div style="font-size:0.75rem; color:var(--text-muted);">${o.cart_items}</div>` : ''}
+            ${o.notes ? `<div style="font-size:0.75rem; color:#fcd34d;">Ghi chú: ${o.notes}</div>` : ''}
+          </td>
+          <td><strong style="color:#fff;">${formatVND(o.total_price || 0)}</strong></td>
+          <td>
+            <select style="padding:4px 8px; font-size:0.8rem; border-radius:6px;" onchange="updateOrderStatus('${o.id}', this.value)">
+              <option value="new" ${o.status === 'new' ? 'selected' : ''}>🆕 Mới tiếp nhận</option>
+              <option value="shipping" ${o.status === 'shipping' ? 'selected' : ''}>🚚 Đang giao</option>
+              <option value="completed" ${o.status === 'completed' ? 'selected' : ''}>✅ Đã hoàn tất</option>
+              <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>❌ Đã hủy</option>
+            </select>
+          </td>
+          <td>
+            <button class="btn btn-danger btn-sm" onclick="deleteOrder('${o.id}')" title="Xóa đơn">🗑️</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function getStatusLabel(st) {
+      switch (st) {
+        case 'new': return 'Mới tiếp nhận';
+        case 'shipping': return 'Đang giao hàng';
+        case 'completed': return 'Đã hoàn tất';
+        case 'cancelled': return 'Đã hủy';
+        default: return st;
+      }
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      try {
+        const res = await fetch(`/api/orders/${orderId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(`Đã chuyển trạng thái đơn #${orderId}`, 'success');
+          await loadOrders();
+        } else {
+          showToast(data.error || 'Lỗi cập nhật đơn', 'error');
+        }
+      } catch (err) {
+        showToast('Lỗi mạng cập nhật đơn hàng', 'error');
+      }
+    }
+
+    async function deleteOrder(orderId) {
+      if (!confirm(`Bạn có chắc chắn muốn xóa đơn hàng #${orderId}?`)) return;
+      try {
+        const res = await fetch(`/api/orders/${orderId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Đã xóa đơn hàng', 'info');
+          await loadOrders();
+        }
+      } catch (err) {
+        showToast('Lỗi mạng khi xóa đơn', 'error');
+      }
+    }
+
+    function openAddOrderModal() {
+      document.getElementById('order-modal-form').reset();
+      document.getElementById('order-modal').classList.add('active');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('order-modal').classList.remove('active');
+    }
+
+    async function handleSaveNewOrder() {
+      const name = document.getElementById('modal-ord-name').value.trim();
+      const phone = document.getElementById('modal-ord-phone').value.trim();
+      const address = document.getElementById('modal-ord-address').value.trim();
+      const main_product = document.getElementById('modal-ord-product').value.trim();
+      const quantity = parseInt(document.getElementById('modal-ord-qty').value) || 1;
+      const total_price = parseInt(document.getElementById('modal-ord-total').value) || 0;
+      const source = document.getElementById('modal-ord-source').value;
+      const notes = document.getElementById('modal-ord-notes').value.trim();
+
+      try {
+        const res = await fetch('/api/orders/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            customer_name: name,
+            customer_phone: phone,
+            customer_address: address,
+            main_product,
+            quantity,
+            total_price,
+            source,
+            notes
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeOrderModal();
+          showToast('Đã ghi nhận đơn hàng mới và gửi thông báo Telegram!', 'success');
+          await loadOrders();
+        }
+      } catch (err) {
+        showToast('Lỗi khi lưu đơn hàng', 'error');
+      }
+    }
+
+    function exportOrdersCSV() {
+      if (ordersData.length === 0) {
+        showToast('Không có dữ liệu đơn hàng để xuất', 'info');
+        return;
+      }
+      const headers = ['Mã Đơn', 'Khách Hàng', 'Số Điện Thoại', 'Địa Chỉ', 'Món Đặt', 'Số Lượng', 'Tổng Tiền (VNĐ)', 'Trạng Thái', 'Nguồn', 'Thời Gian'];
+      const rows = ordersData.map(o => [
+        `"${o.id}"`,
+        `"${(o.customer_name || '').replace(/"/g, '""')}"`,
+        `"${o.customer_phone}"`,
+        `"${(o.customer_address || '').replace(/"/g, '""')}"`,
+        `"${(o.main_product || '').replace(/"/g, '""')}"`,
+        o.quantity || 1,
+        o.total_price || 0,
+        `"${getStatusLabel(o.status)}"`,
+        `"${o.source || 'Website'}"`,
+        `"${o.created_at}"`
+      ]);
+      const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nem-cha-mu-anh-orders-${Date.now()}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Đã xuất file CSV thành công!', 'success');
+    }
+
+    // Git Publish to GitHub Pages
+    document.getElementById('btn-open-publish').addEventListener('click', () => switchTab('tab-publish'));
+
+    async function executePublish() {
+      const btn = document.getElementById('btn-do-publish');
+      const term = document.getElementById('git-terminal-output');
+      const msg = document.getElementById('publish-commit-msg').value.trim();
+
+      btn.disabled = true;
+      btn.innerText = '⏳ Đang Đẩy Lên GitHub Pages...';
+      term.innerText = `[${new Date().toLocaleTimeString()}] Bắt đầu quy trình xuất bản lên GitHub...\nĐang đồng bộ file cấu hình, tạo commit và kết nối remote...`;
+
+      try {
+        const res = await fetch('/api/publish', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ message: msg })
+        });
+        const data = await res.json();
+        if (data.success) {
+          term.innerText += `\n✓ Commit thành công: ${data.commit_sha}\n${data.commit_output || ''}\n${data.push_output || ''}\n\n🎉 Website đã được xuất bản trực tiếp lên GitHub Pages: https://nemchahue.github.io/`;
+          showToast('Xuất bản website lên GitHub Pages thành công!', 'success');
+        } else {
+          term.innerText += `\n✕ Xuất bản thất bại:\n${data.error || data.push_output || 'Lỗi không xác định'}`;
+          showToast('Lỗi xuất bản: ' + (data.error || 'Kiểm tra terminal log'), 'error');
+        }
+      } catch (err) {
+        term.innerText += `\n✕ Lỗi mạng: ${err.message}`;
+        showToast('Lỗi kết nối khi xuất bản', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = '🚀 Xuất Bản Lên Website Ngay Bây Giờ';
+      }
+    }
+
+    async function testTelegram() {
+      try {
+        const res = await fetch('/api/test-telegram', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Đã gửi thông báo thử nghiệm thành công tới Telegram!', 'success');
+        } else {
+          showToast('Lỗi Telegram: ' + (data.message || 'Không gửi được'), 'error');
+        }
+      } catch (err) {
+        showToast('Lỗi kết nối kiểm tra Telegram', 'error');
+      }
+    }
+
+    document.getElementById('btn-test-telegram-overview')?.addEventListener('click', testTelegram);
+
+    // Run on startup
+    window.addEventListener('DOMContentLoaded', initAdmin);
+  </script>
+</body>
+</html>

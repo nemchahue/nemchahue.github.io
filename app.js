@@ -200,7 +200,7 @@ window.trackEvent = function(eventName, eventData = {}) {
   } catch (e) {}
 };
 
-const PRODUCTS = [
+let PRODUCTS = [
   {
     id: 'nem-chua-mu-anh',
     category: 'nem',
@@ -458,10 +458,39 @@ function escapeHTML(str) {
     .replace(/'/g, '&#39;');
 }
 
+// Dynamic Store Configuration Loader (Nem Chả Mụ Ánh Admin Sync)
+async function loadDynamicStoreConfig() {
+  try {
+    const res = await fetch('./data/store_config.json?v=' + Date.now());
+    if (!res.ok) return;
+    const cfg = await res.json();
+    if (Array.isArray(cfg.products) && cfg.products.length > 0) {
+      PRODUCTS = cfg.products.filter(p => p.active !== false);
+      const activeTab = document.querySelector('.cat-btn.active');
+      renderProducts(activeTab ? activeTab.dataset.category : 'all');
+      populateOrderProductSelect();
+    }
+  } catch (e) {
+    // Graceful fallback to static PRODUCTS array
+  }
+}
+
+function populateOrderProductSelect() {
+  const select = document.getElementById('product-select');
+  if (!select) return;
+  const currentVal = select.value;
+  select.innerHTML = PRODUCTS.map(p => 
+    `<option value="${p.name} (${p.unit}) - ${formatVND(p.price)}">${p.name} (${p.unit}) - ${formatVND(p.price)}</option>`
+  ).join('') + '\n<option value="📦 Đặt Mua Sỉ / Đại Lý (Nhận Báo Giá Chiết Khấu)">📦 Đặt Mua Sỉ / Đại Lý (Nhận Báo Giá Chiết Khấu Tốt Nhất)</option>';
+  if (currentVal) select.value = currentVal;
+}
+
 // Setup Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
   loadCart();
   renderProducts('all');
+  populateOrderProductSelect();
+  loadDynamicStoreConfig();
   updateCartUI();
 
   // Category filter tabs
@@ -619,6 +648,25 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify(payload)
           }).catch(e => console.warn('Sheets Webhook:', e));
         }
+      } catch (e) {}
+
+      // Direct Admin Dashboard Synchronization (Silent & Non-blocking)
+      try {
+        fetch('/api/orders/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            customer_name: safeName,
+            customer_phone: safePhone,
+            customer_address: safeAddress,
+            main_product: prodText,
+            quantity: qty,
+            cart_items: cartSummary,
+            notes: safeNote,
+            total_price: totalAmount,
+            source: 'Website'
+          })
+        }).catch(() => {});
       } catch (e) {}
 
       // Record successful order in telemetry & cleanup draft
