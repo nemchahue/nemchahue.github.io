@@ -15,6 +15,7 @@ Provides an interactive high-aesthetic admin dashboard on port 8090 to:
 from __future__ import annotations
 
 import argparse
+import base64
 from datetime import datetime, timezone
 import http.cookies
 import http.server
@@ -42,8 +43,10 @@ ENV_FILE = PROJECT_ROOT / ".env"
 APP_JS_FILE = PROJECT_ROOT / "app.js"
 INDEX_HTML_FILE = PROJECT_ROOT / "index.html"
 ADMIN_DIR = PROJECT_ROOT / "admin"
+UPLOADS_DIR = PROJECT_ROOT / "assets" / "images" / "uploads"
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
+UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Global Sessions
 ACTIVE_SESSIONS: set[str] = set()
@@ -548,6 +551,54 @@ class AdminRequestHandler(http.server.BaseHTTPRequestHandler):
                 "success": True,
                 "message": "Đã lưu thông tin cơ sở và bảng giá thành công!",
                 "config": body
+            })
+            return
+
+        elif path == "/api/upload" or path == "/api/upload-image":
+            raw_data = body.get("image_data") or body.get("data") or ""
+            filename = body.get("filename") or "dish_image.jpg"
+            if not raw_data:
+                self.send_error_json("Thiếu dữ liệu hình ảnh (image_data)", status_code=400)
+                return
+
+            # Clean base64 header (e.g. data:image/jpeg;base64,...)
+            if "," in raw_data and "base64" in raw_data:
+                raw_data = raw_data.split(",", 1)[1]
+
+            try:
+                img_bytes = base64.b64decode(raw_data)
+            except Exception as e:
+                self.send_error_json(f"Dữ liệu base64 không hợp lệ: {e}", status_code=400)
+                return
+
+            if len(img_bytes) > 25 * 1024 * 1024:
+                self.send_error_json("Kích thước ảnh vượt quá giới hạn 25MB", status_code=400)
+                return
+
+            # Sanitize filename
+            clean_name = re.sub(r"[^a-zA-Z0-9_\-\.]", "_", Path(filename).name)
+            ext = Path(clean_name).suffix.lower()
+            if ext not in [".jpg", ".jpeg", ".png", ".webp"]:
+                ext = ".jpg"
+            stem = Path(clean_name).stem[:30] or "dish"
+            safe_filename = f"{stem}_{int(time.time())}_{secrets.token_hex(3)}{ext}"
+
+            UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
+            target_path = UPLOADS_DIR / safe_filename
+            try:
+                target_path.write_bytes(img_bytes)
+            except Exception as e:
+                self.send_error_json(f"Không thể lưu file trên máy chủ: {e}", status_code=500)
+                return
+
+            rel_url = f"assets/images/uploads/{safe_filename}"
+            print(f"[Upload] Saved new cropped image to {target_path} ({len(img_bytes)} bytes)")
+            self.send_json({
+                "success": True,
+                "url": rel_url,
+                "filename": safe_filename,
+                "size_bytes": len(img_bytes),
+                "message": "Tải lên và lưu ảnh đã cắt thành công!"
             })
             return
 
